@@ -1,4 +1,5 @@
 import Code from "./Code";
+import DataTable, { type Column } from "./DataTable";
 import {
   type Concept,
   ConceptList,
@@ -10,17 +11,20 @@ import {
   VerificationList,
 } from "./NotesBlocks";
 import SceneLoading from "./SceneLoading";
+import StepList, { type Step } from "./StepList";
 import { DemoPane, NotesPane } from "./UnitPanes";
 
-export type { Concept, Pitfall, Verification };
+export type { Column, Concept, Pitfall, Step, Verification };
 export {
   Code,
   ConceptList,
+  DataTable,
   DemoPane,
   NotesHeader,
   NotesPane,
   NotesSection,
   PitfallList,
   SceneLoading,
+  StepList,
   VerificationList,
 };

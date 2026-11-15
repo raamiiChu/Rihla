@@ -4,7 +4,7 @@ type Unit = {
   id: string;
   title: string;
   phase: Phase;
-  /** `script` units live under `scripts/` and have no page. */
+  /** Where the practice code lives: a `/lab` page, or `scripts/` (notes page only). */
   kind: "page" | "script";
   status: UnitStatus;
 };
@@ -24,7 +24,7 @@ const UNITS: Unit[] = [
     title: "fontkit 書法腳本（風險驗證）",
     phase: 1,
     kind: "script",
-    status: "todo",
+    status: "done",
   },
   {
     id: "02",

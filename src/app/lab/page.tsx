@@ -14,7 +14,8 @@ const STATUS_STYLE: Record<UnitStatus, string> = {
 };
 
 const UnitRow = ({ unit }: { unit: Unit }) => {
-  const isOpenable = unit.kind === "page" && unit.status !== "todo";
+  // Script units have no demo page, but they still get a notes page.
+  const isOpenable = unit.status !== "todo";
 
   const content = (
     <>
