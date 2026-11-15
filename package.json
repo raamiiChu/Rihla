@@ -9,7 +9,8 @@
     "lint": "biome check",
     "format": "biome format --write",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "lab:01": "tsx scripts/lab/01-shape-arabic.ts"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",

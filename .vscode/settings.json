@@ -5,5 +5,19 @@
     "source.fixAll.biome": "explicit",
     "source.organizeImports.biome": "explicit"
   },
-  "files.eol": "\n"
+  "files.eol": "\n",
+  "cSpell.words": [
+    "amiri",
+    "DIHLI",
+    "fina",
+    "Harakat",
+    "Harf",
+    "isol",
+    "liga",
+    "medi",
+    "mkmk",
+    "naskh",
+    "RIHLA",
+    "rlig"
+  ]
 }
