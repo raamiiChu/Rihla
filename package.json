@@ -27,11 +27,14 @@
   "devDependencies": {
     "@biomejs/biome": "2.6.7",
     "@tailwindcss/turbopack": "4.3.3",
+    "@types/fontkit": "^2.0.9",
     "@types/node": "^22.20.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "^0.187.0",
+    "fontkit": "^3.0.0",
     "tailwindcss": "4.3.3",
+    "tsx": "^4.23.15",
     "typescript": "^5",
     "vitest": "^5.1.0"
   },
