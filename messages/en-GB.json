@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "title": "Rihla — Thirty Years, One Line",
+    "description": "Retracing Ibn Battuta's thirty-year journey in one line."
+  },
+  "home": {
+    "title": "Rihla",
+    "intro": "Ibn Battuta's travelogue is called <i>Rihla</i>."
+  },
+  "localeSwitcher": {
+    "label": "Language"
+  }
+}

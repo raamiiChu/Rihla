@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { Amiri, Noto_Serif_TC, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
+
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getTranslations } from "next-intl/server";
 import type { PropsWithChildren } from "react";
+
+import { getDirection } from "@/i18n/config";
 
 // en
 const sourceSerif = Source_Serif_4({
@@ -27,18 +32,23 @@ const amiri = Amiri({
   variable: "--font-arabic",
 });
 
-export const metadata: Metadata = {
-  title: "Rihla — Thirty Years, One Line",
-  description: "Retracing Ibn Battuta's thirty-year journey in one line.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("meta");
+  return { title: t("title"), description: t("description") };
+}
 
-export default function RootLayout({ children }: PropsWithChildren) {
+export default async function RootLayout({ children }: PropsWithChildren) {
+  const locale = await getLocale();
+
   return (
     <html
-      lang="en-GB"
+      lang={locale}
+      dir={getDirection(locale)}
       className={`${sourceSerif.variable} ${notoSerifTC.variable} ${amiri.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+      </body>
     </html>
   );
 }
