@@ -38,7 +38,7 @@ const GlyphDiagram = () => (
       viewBox={viewBox}
       role="img"
       aria-labelledby="glyph-diagram-title"
-      className="h-auto max-h-full w-full bg-white"
+      className="h-auto max-h-full w-full"
     >
       <title id="glyph-diagram-title">
         دهلي 的排版結果，標出 ascent、基線、descent 與每個字形的 xAdvance。
@@ -53,16 +53,14 @@ const GlyphDiagram = () => (
             y2={guide.y}
             vectorEffect="non-scaling-stroke"
             className={
-              guide.id === "baseline"
-                ? "stroke-neutral-500"
-                : "stroke-neutral-300"
+              guide.id === "baseline" ? "stroke-muted" : "stroke-muted/40"
             }
             strokeDasharray={guide.id === "baseline" ? undefined : "4 6"}
           />
           <text
             x={-PADDING + 12}
             y={guide.y - 16}
-            className="fill-neutral-600 font-mono"
+            className="fill-muted"
             fontSize={36}
           >
             {guide.label}
@@ -78,23 +76,19 @@ const GlyphDiagram = () => (
           y1={-ascent}
           y2={-descent}
           vectorEffect="non-scaling-stroke"
-          className="stroke-sky-500/70"
+          className="stroke-gold/60"
           strokeDasharray="2 6"
         />
       ))}
 
-      <path d={DIHLI_PATH} className="fill-black" />
+      <path d={DIHLI_PATH} className="fill-parchment" />
 
       {DIHLI_GLYPHS.map((glyph, position) => {
         const centre = (penStops[position] + penStops[position + 1]) / 2;
 
         return (
-          <g
-            key={glyph.codePoint}
-            className="fill-neutral-600"
-            textAnchor="middle"
-          >
-            <text x={centre} y={-descent + 110} fontSize={72} lang="ar">
+          <g key={glyph.codePoint} className="fill-muted" textAnchor="middle">
+            <text x={centre} y={-descent + 110} fontSize={96} lang="ar">
               {glyph.letter}
             </text>
             <text

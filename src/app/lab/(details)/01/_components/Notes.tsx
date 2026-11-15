@@ -1,4 +1,6 @@
+import type { ReactNode } from "react";
 import {
+  Ar,
   Code,
   type Column,
   type Concept,
@@ -17,7 +19,15 @@ import { AMIRI_METRICS, DIHLI_GLYPHS } from "./dihli";
 
 const STEPS: Step[] = [
   { id: "font-info", title: "開啟字型，印出度量值與 feature", done: true },
-  { id: "glyph-run", title: "排版 دهلي，逐一印出每個 glyph", done: true },
+  {
+    id: "glyph-run",
+    title: (
+      <>
+        排版 <Ar>دهلي</Ar>，逐一印出每個 glyph
+      </>
+    ),
+    done: true,
+  },
   { id: "svg", title: "輸出成 SVG", done: true },
   { id: "compare", title: "跟瀏覽器的排版結果比對", done: true },
   { id: "noto", title: "換成 Noto Naskh Arabic 比較", done: true },
@@ -53,7 +63,7 @@ const METRIC_ROWS: MetricRow[] = [
 type GlyphRow = {
   id: string;
   index: number;
-  letter: string;
+  letter: ReactNode;
   codePoint: string;
   form: string;
   shapedId: number;
@@ -75,6 +85,7 @@ const GLYPH_ROWS: GlyphRow[] = DIHLI_GLYPHS.map((glyph, index) => ({
   id: glyph.codePoint,
   index,
   ...glyph,
+  letter: <Ar>{glyph.letter}</Ar>,
 }));
 
 const CONCEPTS: Concept[] = [
@@ -92,8 +103,9 @@ const CONCEPTS: Concept[] = [
     title: "只能向右連接的字母",
     body: (
       <>
-        ا د ذ ر ز و 只能跟前一個字母相連，不能接後一個。所以 دهلي
-        在畫面上其實是「د｜هلي」兩段：د 維持單獨形（id 沒變），ه
+        <Ar>ا د ذ ر ز و</Ar> 只能跟前一個字母相連，不能接後一個。所以{" "}
+        <Ar>دهلي</Ar> 在畫面上其實是「<Ar>د｜هلي</Ar>」兩段：<Ar>د</Ar>{" "}
+        維持單獨形（id 沒變），<Ar>ه</Ar>{" "}
         則成為後一段的字首。兩段之間的空隙是正確的。
       </>
     ),
@@ -157,11 +169,11 @@ const CONCEPTS: Concept[] = [
     title: "不同字型的拆字方式不同",
     body: (
       <>
-        Noto Naskh 把字尾的 ي 拆成「無點的字身（
+        Noto Naskh 把字尾的 <Ar>ي</Ar> 拆成「無點的字身（
         <Code>uni0649.fina</Code>）＋一個獨立的點字形」，點字形的{" "}
         <Code>codePoints</Code> 是空陣列、<Code>xAdvance</Code> 為 0，靠{" "}
         <Code>xOffset</Code>、<Code>yOffset</Code> 擺到正確位置。Amiri
-        則把點畫在字身裡。 لا 在兩套字型裡都是 2 個 glyph（各自換成{" "}
+        則把點畫在字身裡。<Ar>لا</Ar> 在兩套字型裡都是 2 個 glyph（各自換成{" "}
         <Code>rlig</Code> 的形狀），不是 1 個合字字形。
         <strong>
           對單元 10 的影響：輪廓要依實際位置（bbox 的 x）由右往左排序，不能依
@@ -271,7 +283,8 @@ const VERIFICATIONS: Verification[] = [
     body: (
       <>
         執行 <Code>pnpm lab:01</Code>，打開{" "}
-        <Code>scripts/lab/out/dihli-amiri.svg</Code>：د 在最右邊，字不顛倒。
+        <Code>scripts/lab/out/dihli-amiri.svg</Code>：<Ar>د</Ar>{" "}
+        在最右邊，字不顛倒。
       </>
     ),
   },
@@ -290,7 +303,7 @@ const VERIFICATIONS: Verification[] = [
     id: "compare",
     body: (
       <>
-        打開 <Code>scripts/lab/out/compare.html</Code>，以 دهلي رحلة لا
+        打開 <Code>scripts/lab/out/compare.html</Code>，以 <Ar>دهلي رحلة لا</Ar>{" "}
         逐字比對瀏覽器（HarfBuzz）與 fontkit
         的輸出：連寫、字形、點的位置都一致。
       </>
@@ -302,7 +315,7 @@ const Notes = () => (
   <>
     <NotesHeader unitId="01">
       驗證 fontkit 能不能正確排出阿拉伯文：這是整個專案最大的技術風險。旁邊是用
-      Amiri 排出 دهلي 的結果，虛線標出每個字形的位置與 xAdvance。
+      Amiri 排出 <Ar>دهلي</Ar> 的結果，虛線標出每個字形的位置與 xAdvance。
     </NotesHeader>
 
     <NotesSection title="進度">
@@ -310,14 +323,14 @@ const Notes = () => (
     </NotesSection>
 
     <NotesSection title="目前的結論">
-      <ul className="list-disc space-y-2 ps-5 text-neutral-300 marker:text-neutral-600">
+      <ul className="list-disc space-y-2 ps-5 text-parchment/90 marker:text-muted/70">
         <li>
           fontkit 回傳的 <Code>glyphs</Code> 是<strong>視覺順序</strong>
-          ：第 0 個是畫面最左邊的 ي，所以筆從 x = 0 往右走即可。
+          ：第 0 個是畫面最左邊的 <Ar>ي</Ar>，所以筆從 x = 0 往右走即可。
         </li>
         <li>
-          兩套字型排出的 دهلي رحلة لا 都跟瀏覽器（HarfBuzz）一致，包括 Noto
-          用偏移量擺放的點。fontkit 可以用在這個專案。
+          兩套字型排出的 <Ar>دهلي رحلة لا</Ar> 都跟瀏覽器（HarfBuzz）一致，包括
+          Noto 用偏移量擺放的點。fontkit 可以用在這個專案。
         </li>
         <li>
           <strong>採用 Amiri</strong>：與 DOM 引言使用的字型一致，而且以 Bulaq
@@ -335,7 +348,11 @@ const Notes = () => (
           rows={METRIC_ROWS}
         />
         <DataTable
-          caption="Amiri 排版 دهلي 的每個 glyph"
+          caption={
+            <>
+              Amiri 排版 <Ar>دهلي</Ar> 的每個 glyph
+            </>
+          }
           columns={GLYPH_COLUMNS}
           rows={GLYPH_ROWS}
         />

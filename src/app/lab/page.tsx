@@ -8,9 +8,9 @@ const STATUS_LABEL: Record<UnitStatus, string> = {
 };
 
 const STATUS_STYLE: Record<UnitStatus, string> = {
-  done: "border-amber-300/40 text-amber-200",
-  "in-progress": "border-sky-300/40 text-sky-200",
-  todo: "border-neutral-700 text-neutral-500",
+  done: "border-gold/40 text-gold",
+  "in-progress": "border-parchment/30 text-parchment",
+  todo: "border-parchment/15 text-muted",
 };
 
 const UnitRow = ({ unit }: { unit: Unit }) => {
@@ -19,12 +19,10 @@ const UnitRow = ({ unit }: { unit: Unit }) => {
 
   const content = (
     <>
-      <span className="font-mono text-sm text-neutral-500 tabular-nums">
-        {unit.id}
-      </span>
+      <span className="text-sm text-muted tabular-nums">{unit.id}</span>
       <span className="min-w-0 flex-1 truncate">{unit.title}</span>
       {unit.kind === "script" && (
-        <span className="text-xs text-neutral-500">腳本</span>
+        <span className="text-xs text-muted">腳本</span>
       )}
       <span
         className={`rounded-full border px-2 py-0.5 text-xs ${STATUS_STYLE[unit.status]}`}
@@ -39,7 +37,7 @@ const UnitRow = ({ unit }: { unit: Unit }) => {
 
   if (!isOpenable) {
     return (
-      <div className={`${rowClass} border-neutral-900 text-neutral-300`}>
+      <div className={`${rowClass} border-parchment/5 text-parchment/90`}>
         {content}
       </div>
     );
@@ -48,7 +46,7 @@ const UnitRow = ({ unit }: { unit: Unit }) => {
   return (
     <Link
       href={`/lab/${unit.id}`}
-      className={`${rowClass} border-neutral-800 text-neutral-100 hover:border-amber-300/50 hover:bg-neutral-900`}
+      className={`${rowClass} border-parchment/10 text-parchment hover:border-gold/50 hover:bg-parchment/5`}
     >
       {content}
     </Link>
@@ -62,20 +60,20 @@ const LabPage = () => {
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
       <header className="mb-12">
-        <p className="text-xs tracking-[0.3em] text-amber-300/80 uppercase">
+        <p className="text-xs tracking-[0.3em] text-gold/80 uppercase">
           Rihla · Lab
         </p>
-        <h1 className="mt-3 text-3xl text-neutral-100">練習場</h1>
-        <p className="mt-3 text-sm leading-relaxed text-neutral-300">
+        <h1 className="mt-3 text-3xl text-parchment">練習場</h1>
+        <p className="mt-3 text-sm leading-relaxed text-parchment/90">
           每個單元先在這裡用最小範例練熟，再搬進正式專案。
         </p>
-        <p className="mt-6 text-sm text-neutral-500 tabular-nums">
+        <p className="mt-6 text-sm text-muted tabular-nums">
           已完成 {doneCount} / {UNITS.length}
         </p>
         {/* Decorative: the text above already states the progress. */}
-        <div className="mt-2 h-px w-full bg-neutral-800" aria-hidden="true">
+        <div className="mt-2 h-px w-full bg-parchment/10" aria-hidden="true">
           <div
-            className="h-px bg-amber-300/70"
+            className="h-px bg-gold/70"
             style={{ inlineSize: `${(doneCount / UNITS.length) * 100}%` }}
           />
         </div>
@@ -84,7 +82,7 @@ const LabPage = () => {
       <div className="space-y-10">
         {phases.map((phase) => (
           <section key={phase}>
-            <h2 className="mb-3 text-xs tracking-widest text-neutral-500">
+            <h2 className="mb-3 text-xs tracking-widest text-muted">
               第 {phase} 階段：{PHASES[phase]}
             </h2>
             <ul className="space-y-2">

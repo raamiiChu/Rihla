@@ -1,8 +1,8 @@
-import type { PropsWithChildren } from "react";
+import type { PropsWithChildren, ReactNode } from "react";
 
 type DemoPaneProps = PropsWithChildren<{
   /** Describes the demo for screen readers, since a canvas has no readable content. */
-  caption: string;
+  caption: ReactNode;
 }>;
 
 /**
@@ -11,7 +11,7 @@ type DemoPaneProps = PropsWithChildren<{
  * The Canvas fills its parent, so this pane must have an explicit height.
  */
 const DemoPane = ({ caption, children }: DemoPaneProps) => (
-  <figure className="h-[55dvh] border-b border-neutral-900 lg:sticky lg:top-0 lg:order-last lg:h-dvh lg:self-start lg:border-s lg:border-b-0">
+  <figure className="h-[55dvh] border-b border-parchment/5 lg:sticky lg:top-0 lg:order-last lg:h-dvh lg:self-start lg:border-s lg:border-b-0">
     {children}
     <figcaption className="sr-only">{caption}</figcaption>
   </figure>
@@ -20,7 +20,7 @@ const DemoPane = ({ caption, children }: DemoPaneProps) => (
 /** The notes column: a self-contained article with a readable line length. */
 const NotesPane = ({ children }: PropsWithChildren) => (
   <article className="px-6 py-12 lg:px-12 lg:py-16">
-    <div className="max-w-prose text-[15px] leading-relaxed">{children}</div>
+    <div className="max-w-prose text-body">{children}</div>
   </article>
 );
 

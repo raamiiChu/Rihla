@@ -6,8 +6,8 @@ import { MathUtils } from "three";
 const Scene = () => {
   return (
     <Canvas>
-      {/* Matches the page background (neutral-950). */}
-      <color attach="background" args={["#0a0a0a"]} />
+      {/* Matches the page background (--color-night in globals.css). */}
+      <color attach="background" args={["#07080d"]} />
       <directionalLight position={[-2, 0, 2]} />
       <ambientLight intensity={0.75} />
 

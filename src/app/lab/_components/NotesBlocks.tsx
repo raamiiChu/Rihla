@@ -20,16 +20,16 @@ const NotesHeader = ({ unitId, children }: NotesHeaderProps) => {
       <nav aria-label="返回">
         <Link
           href="/lab"
-          className="text-sm text-neutral-500 transition-colors hover:text-amber-200"
+          className="text-sm text-muted transition-colors hover:text-gold"
         >
           ← 回到練習場
         </Link>
       </nav>
 
       <header className="mt-8">
-        <p className="font-mono text-sm text-neutral-500">Unit {unit.id}</p>
-        <h1 className="mt-2 text-3xl text-neutral-100">{unit.title}</h1>
-        <p className="mt-4 text-neutral-300">{children}</p>
+        <p className="text-sm text-muted">Unit {unit.id}</p>
+        <h1 className="mt-2 text-3xl text-parchment">{unit.title}</h1>
+        <p className="mt-4 text-parchment/90">{children}</p>
       </header>
     </>
   );
@@ -41,7 +41,7 @@ const NotesSection = ({
   children,
 }: PropsWithChildren<{ title: string }>) => (
   <section className="mt-12">
-    <h2 className="mb-4 text-xs tracking-widest text-amber-300/80">{title}</h2>
+    <h2 className="mb-4 text-xs tracking-widest text-gold/80">{title}</h2>
     {children}
   </section>
 );
@@ -53,8 +53,8 @@ const ConceptList = ({ items }: { items: Concept[] }) => (
     <dl className="space-y-6">
       {items.map((item) => (
         <div key={item.title}>
-          <dt className="text-neutral-100">{item.title}</dt>
-          <dd className="mt-1.5 text-neutral-300">{item.body}</dd>
+          <dt className="font-semibold text-parchment">{item.title}</dt>
+          <dd className="mt-1.5 text-parchment/90">{item.body}</dd>
         </div>
       ))}
     </dl>
@@ -69,9 +69,9 @@ type Pitfall = {
 };
 
 const PITFALL_FIELDS = [
-  { key: "symptom", label: "症狀", labelClass: "text-neutral-500" },
-  { key: "cause", label: "原因", labelClass: "text-neutral-500" },
-  { key: "fix", label: "解法", labelClass: "text-amber-300/80" },
+  { key: "symptom", label: "症狀", labelClass: "text-muted" },
+  { key: "cause", label: "原因", labelClass: "text-muted" },
+  { key: "fix", label: "解法", labelClass: "text-gold/80" },
 ] as const;
 
 const PitfallList = ({ items }: { items: Pitfall[] }) => (
@@ -80,14 +80,14 @@ const PitfallList = ({ items }: { items: Pitfall[] }) => (
       {items.map((item) => (
         <li
           key={item.title}
-          className="rounded-lg border border-neutral-800 bg-neutral-900/40 p-5"
+          className="rounded-lg border border-parchment/10 bg-parchment/[0.03] p-5"
         >
-          <h3 className="text-neutral-100">{item.title}</h3>
+          <h3 className="font-semibold text-parchment">{item.title}</h3>
           <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
             {PITFALL_FIELDS.map(({ key, label, labelClass }) => (
               <div key={key} className="contents">
                 <dt className={labelClass}>{label}</dt>
-                <dd className="text-neutral-300">{item[key]}</dd>
+                <dd className="text-parchment/90">{item[key]}</dd>
               </div>
             ))}
           </dl>
@@ -101,7 +101,7 @@ type Verification = { id: string; body: ReactNode };
 
 const VerificationList = ({ items }: { items: Verification[] }) => (
   <NotesSection title="驗證方式">
-    <ol className="list-decimal space-y-2 ps-5 text-neutral-300 marker:text-neutral-600">
+    <ol className="list-decimal space-y-2 ps-5 text-parchment/90 marker:text-muted/70">
       {items.map((item) => (
         <li key={item.id}>{item.body}</li>
       ))}

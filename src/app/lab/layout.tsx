@@ -6,7 +6,7 @@ const LabLayout = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <main lang="zh-TW" className="min-h-dvh bg-neutral-950 text-neutral-300">
+    <main lang="zh-TW" className="min-h-dvh text-parchment/90">
       {children}
     </main>
   );

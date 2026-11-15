@@ -1,3 +1,4 @@
+import Ar from "./Ar";
 import Code from "./Code";
 import DataTable, { type Column } from "./DataTable";
 import {
@@ -16,6 +17,7 @@ import { DemoPane, NotesPane } from "./UnitPanes";
 
 export type { Column, Concept, Pitfall, Step, Verification };
 export {
+  Ar,
   Code,
   ConceptList,
   DataTable,
