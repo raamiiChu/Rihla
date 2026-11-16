@@ -3,7 +3,7 @@
  * Pass it to `dynamic(..., { loading: SceneLoading })`.
  */
 const SceneLoading = () => (
-  <div className="flex h-full items-center justify-center text-sm text-muted">
+  <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
     載入中…
   </div>
 );

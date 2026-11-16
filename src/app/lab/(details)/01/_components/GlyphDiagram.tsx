@@ -53,14 +53,16 @@ const GlyphDiagram = () => (
             y2={guide.y}
             vectorEffect="non-scaling-stroke"
             className={
-              guide.id === "baseline" ? "stroke-muted" : "stroke-muted/40"
+              guide.id === "baseline"
+                ? "stroke-muted-foreground"
+                : "stroke-muted-foreground/40"
             }
             strokeDasharray={guide.id === "baseline" ? undefined : "4 6"}
           />
           <text
             x={-PADDING + 12}
             y={guide.y - 16}
-            className="fill-muted"
+            className="fill-muted-foreground"
             fontSize={36}
           >
             {guide.label}
@@ -87,7 +89,11 @@ const GlyphDiagram = () => (
         const centre = (penStops[position] + penStops[position + 1]) / 2;
 
         return (
-          <g key={glyph.codePoint} className="fill-muted" textAnchor="middle">
+          <g
+            key={glyph.codePoint}
+            className="fill-muted-foreground"
+            textAnchor="middle"
+          >
             <text x={centre} y={-descent + 110} fontSize={96} lang="ar">
               {glyph.letter}
             </text>

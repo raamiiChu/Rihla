@@ -7,6 +7,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import type { PropsWithChildren } from "react";
 
 import { getDirection } from "@/i18n/config";
+import { cn } from "@/lib/utils";
 
 // en
 const sourceSerif = Source_Serif_4({
@@ -44,7 +45,14 @@ export default async function RootLayout({ children }: PropsWithChildren) {
     <html
       lang={locale}
       dir={getDirection(locale)}
-      className={`${sourceSerif.variable} ${notoSerifTC.variable} ${amiri.variable} h-full antialiased`}
+      // The site is always dark: `dark` activates the `dark:` variants that
+      // shadcn/ui components rely on.
+      className={cn(
+        "dark h-full antialiased",
+        sourceSerif.variable,
+        notoSerifTC.variable,
+        amiri.variable,
+      )}
     >
       <body className="flex min-h-full flex-col">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>

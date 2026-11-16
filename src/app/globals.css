@@ -1,9 +1,16 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-@theme {
+/* The site is always dark: <html> carries the `dark` class permanently, so
+   the `dark:` variants used by shadcn/ui components always apply. */
+@custom-variant dark (&:is(.dark *));
+
+/* Brand palette. `static` emits every variable even when no utility uses it,
+   because the shadcn variables below reference them with var(). */
+@theme static {
   --color-night: #07080d;
   --color-parchment: #e8e2d4;
-  --color-muted: #d1cbc0;
   --color-gold: #d9b26a;
 
   --text-body: 1rem;
@@ -12,12 +19,74 @@
 
 @theme inline {
   --font-serif: var(--font-latin), var(--font-tc), var(--font-arabic), serif;
+  /* shadcn/ui components may use font-sans / font-heading; point both at the
+     site-wide serif stack so they can never switch typeface. */
+  --font-sans: var(--font-latin), var(--font-tc), var(--font-arabic), serif;
+  --font-heading: var(--font-sans);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* shadcn/ui semantic colours, mapped onto the brand palette.
+   `muted` is a subdued background; `muted-foreground` is subdued text. */
+:root {
+  --background: var(--color-night);
+  --foreground: var(--color-parchment);
+  --card: color-mix(in oklab, var(--color-parchment) 4%, var(--color-night));
+  --card-foreground: var(--color-parchment);
+  --popover: color-mix(in oklab, var(--color-parchment) 6%, var(--color-night));
+  --popover-foreground: var(--color-parchment);
+  --primary: var(--color-gold);
+  --primary-foreground: var(--color-night);
+  --secondary: color-mix(
+    in oklab,
+    var(--color-parchment) 10%,
+    var(--color-night)
+  );
+  --secondary-foreground: var(--color-parchment);
+  --muted: color-mix(in oklab, var(--color-parchment) 8%, var(--color-night));
+  --muted-foreground: #d1cbc0;
+  --accent: color-mix(in oklab, var(--color-parchment) 12%, var(--color-night));
+  --accent-foreground: var(--color-parchment);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: color-mix(in oklab, var(--color-parchment) 10%, transparent);
+  --input: color-mix(in oklab, var(--color-parchment) 15%, transparent);
+  --ring: var(--color-gold);
+  --radius: 0.625rem;
 }
 
 @layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
   body {
-    background-color: var(--color-night);
-    color: var(--color-parchment);
+    @apply bg-background text-foreground;
     font-size: var(--text-body);
     line-height: var(--text-body--line-height);
     font-synthesis-style: none;
@@ -35,10 +104,10 @@
   }
 
   /* Amiri's letter bodies sit small within the em (tall ascenders, deep
-    descenders), so Arabic looks smaller than Latin or Chinese at the same
-    font-size. Scale only the outermost Arabic element: `em` is relative to
-    the parent, so nested `lang="ar"` elements would otherwise compound. */
-  /* Skipped inside SVG: SVG text is sized in viewBox units through the
+     descenders), so Arabic looks smaller than Latin or Chinese at the same
+     font-size. Scale only the outermost Arabic element: `em` is relative to
+     the parent, so nested `lang="ar"` elements would otherwise compound.
+     Skipped inside SVG: SVG text is sized in viewBox units through the
      `font-size` attribute, which any CSS rule would otherwise override. */
   :lang(ar):not(:lang(ar) *):not(svg *) {
     font-size: 1.5em;

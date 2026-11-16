@@ -26,7 +26,7 @@ function DataTable<T extends Row>({
       <table className="w-full text-sm">
         <caption className="sr-only">{caption}</caption>
         <thead>
-          <tr className="border-b border-parchment/10 text-muted">
+          <tr className="border-b border-parchment/10 text-muted-foreground">
             {columns.map((column) => (
               <th
                 key={column.key}

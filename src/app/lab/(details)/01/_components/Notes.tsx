@@ -323,7 +323,7 @@ const Notes = () => (
     </NotesSection>
 
     <NotesSection title="目前的結論">
-      <ul className="list-disc space-y-2 ps-5 text-parchment/90 marker:text-muted/70">
+      <ul className="list-disc space-y-2 ps-5 text-parchment/90 marker:text-muted-foreground/70">
         <li>
           fontkit 回傳的 <Code>glyphs</Code> 是<strong>視覺順序</strong>
           ：第 0 個是畫面最左邊的 <Ar>ي</Ar>，所以筆從 x = 0 往右走即可。

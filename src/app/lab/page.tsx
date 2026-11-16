@@ -10,7 +10,7 @@ const STATUS_LABEL: Record<UnitStatus, string> = {
 const STATUS_STYLE: Record<UnitStatus, string> = {
   done: "border-gold/40 text-gold",
   "in-progress": "border-parchment/30 text-parchment",
-  todo: "border-parchment/15 text-muted",
+  todo: "border-parchment/15 text-muted-foreground",
 };
 
 const UnitRow = ({ unit }: { unit: Unit }) => {
@@ -19,10 +19,12 @@ const UnitRow = ({ unit }: { unit: Unit }) => {
 
   const content = (
     <>
-      <span className="text-sm text-muted tabular-nums">{unit.id}</span>
+      <span className="text-sm text-muted-foreground tabular-nums">
+        {unit.id}
+      </span>
       <span className="min-w-0 flex-1 truncate">{unit.title}</span>
       {unit.kind === "script" && (
-        <span className="text-xs text-muted">腳本</span>
+        <span className="text-xs text-muted-foreground">腳本</span>
       )}
       <span
         className={`rounded-full border px-2 py-0.5 text-xs ${STATUS_STYLE[unit.status]}`}
@@ -67,7 +69,7 @@ const LabPage = () => {
         <p className="mt-3 text-sm leading-relaxed text-parchment/90">
           每個單元先在這裡用最小範例練熟，再搬進正式專案。
         </p>
-        <p className="mt-6 text-sm text-muted tabular-nums">
+        <p className="mt-6 text-sm text-muted-foreground tabular-nums">
           已完成 {doneCount} / {UNITS.length}
         </p>
         {/* Decorative: the text above already states the progress. */}
@@ -82,7 +84,7 @@ const LabPage = () => {
       <div className="space-y-10">
         {phases.map((phase) => (
           <section key={phase}>
-            <h2 className="mb-3 text-xs tracking-widest text-muted">
+            <h2 className="mb-3 text-xs tracking-widest text-muted-foreground">
               第 {phase} 階段：{PHASES[phase]}
             </h2>
             <ul className="space-y-2">

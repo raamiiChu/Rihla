@@ -20,14 +20,14 @@ const NotesHeader = ({ unitId, children }: NotesHeaderProps) => {
       <nav aria-label="返回">
         <Link
           href="/lab"
-          className="text-sm text-muted transition-colors hover:text-gold"
+          className="text-sm text-muted-foreground transition-colors hover:text-gold"
         >
           ← 回到練習場
         </Link>
       </nav>
 
       <header className="mt-8">
-        <p className="text-sm text-muted">Unit {unit.id}</p>
+        <p className="text-sm text-muted-foreground">Unit {unit.id}</p>
         <h1 className="mt-2 text-3xl text-parchment">{unit.title}</h1>
         <p className="mt-4 text-parchment/90">{children}</p>
       </header>
@@ -69,8 +69,8 @@ type Pitfall = {
 };
 
 const PITFALL_FIELDS = [
-  { key: "symptom", label: "症狀", labelClass: "text-muted" },
-  { key: "cause", label: "原因", labelClass: "text-muted" },
+  { key: "symptom", label: "症狀", labelClass: "text-muted-foreground" },
+  { key: "cause", label: "原因", labelClass: "text-muted-foreground" },
   { key: "fix", label: "解法", labelClass: "text-gold/80" },
 ] as const;
 
@@ -101,7 +101,7 @@ type Verification = { id: string; body: ReactNode };
 
 const VerificationList = ({ items }: { items: Verification[] }) => (
   <NotesSection title="驗證方式">
-    <ol className="list-decimal space-y-2 ps-5 text-parchment/90 marker:text-muted/70">
+    <ol className="list-decimal space-y-2 ps-5 text-parchment/90 marker:text-muted-foreground/70">
       {items.map((item) => (
         <li key={item.id}>{item.body}</li>
       ))}
