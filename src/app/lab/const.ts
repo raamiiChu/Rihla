@@ -31,7 +31,7 @@ const UNITS: Unit[] = [
     title: "zustand 與 Lenis",
     phase: 1,
     kind: "page",
-    status: "todo",
+    status: "done",
   },
   {
     id: "03",
@@ -40,7 +40,13 @@ const UNITS: Unit[] = [
     kind: "page",
     status: "todo",
   },
-  { id: "04", title: "曲線與鏡頭軌道", phase: 1, kind: "page", status: "todo" },
+  {
+    id: "04",
+    title: "曲線與鏡頭軌道",
+    phase: 1,
+    kind: "page",
+    status: "todo",
+  },
   {
     id: "05",
     title: "迷你時間軸與 SKIP",
@@ -55,8 +61,20 @@ const UNITS: Unit[] = [
     kind: "page",
     status: "todo",
   },
-  { id: "07", title: "依弧長重新取樣", phase: 1, kind: "page", status: "todo" },
-  { id: "08", title: "形變與起點對齊", phase: 1, kind: "page", status: "todo" },
+  {
+    id: "07",
+    title: "依弧長重新取樣",
+    phase: 1,
+    kind: "page",
+    status: "todo",
+  },
+  {
+    id: "08",
+    title: "形變與起點對齊",
+    phase: 1,
+    kind: "page",
+    status: "todo",
+  },
   {
     id: "09",
     title: "Line2 與手動寫入 buffer",
@@ -64,7 +82,13 @@ const UNITS: Unit[] = [
     kind: "page",
     status: "todo",
   },
-  { id: "10", title: "書法取點與形變", phase: 2, kind: "page", status: "todo" },
+  {
+    id: "10",
+    title: "書法取點與形變",
+    phase: 2,
+    kind: "page",
+    status: "todo",
+  },
   {
     id: "11",
     title: "Additive、頂點顏色與點",
@@ -93,8 +117,20 @@ const UNITS: Unit[] = [
     kind: "page",
     status: "todo",
   },
-  { id: "15", title: "Shader 點雲", phase: 2, kind: "page", status: "todo" },
-  { id: "16", title: "減少動態效果", phase: 4, kind: "page", status: "todo" },
+  {
+    id: "15",
+    title: "Shader 點雲",
+    phase: 2,
+    kind: "page",
+    status: "todo",
+  },
+  {
+    id: "16",
+    title: "減少動態效果",
+    phase: 4,
+    kind: "page",
+    status: "todo",
+  },
 ];
 
 export type { Phase, Unit, UnitStatus };
