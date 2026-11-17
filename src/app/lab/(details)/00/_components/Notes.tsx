@@ -49,6 +49,21 @@ const CONCEPTS: Concept[] = [
     ),
   },
   {
+    title: "attach：告訴 R3F 這個物件要放在哪裡",
+    body: (
+      <>
+        R3F 的每個 JSX 標籤都會建立一個 three{" "}
+        物件。大部分物件會自動放到該放的地方：
+        <Code>&lt;mesh&gt;</Code> 和燈光放進場景，
+        <Code>&lt;boxGeometry&gt;</Code>
+        成為方塊的形狀，<Code>&lt;meshStandardMaterial&gt;</Code>
+        成為方塊的材質。背景色沒有預設的位置，所以要用 <Code>attach</Code>
+        指定：<Code>&lt;color attach=&quot;background&quot; /&gt;</Code>
+        的意思是「把這個顏色設成場景的背景」。
+      </>
+    ),
+  },
+  {
     title: "layout 是整個資料夾的守門員",
     body: (
       <>
