@@ -1,11 +1,15 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { type Font, openSync } from "fontkit";
+import type { Font } from "fontkit";
 import { stripHarakat } from "../lib/arabic";
+import { layoutText, loadFont, type ShapedText } from "../lib/shape";
 
 type FontEntry = { key: string; path: string };
 
 const FONTS: FontEntry[] = [
-  { key: "amiri", path: "assets/fonts/amiri/Amiri-Regular.ttf" },
+  {
+    key: "amiri",
+    path: "assets/fonts/amiri/Amiri-Regular.ttf",
+  },
   {
     key: "noto",
     path: "assets/fonts/noto-naskh-arabic/NotoNaskhArabic-Regular.ttf",
@@ -32,16 +36,6 @@ const SAMPLE = [DIHLI, RIHLA, LA].join(" ");
 // دِهْلِي: دهلي with kasra and sukun, to check stripHarakat end to end.
 const DIHLI_VOCALISED = "دِهْلِي";
 
-const loadFont = (fontPath: string): Font => {
-  const loadedFont = openSync(fontPath);
-
-  if (!("layout" in loadedFont)) {
-    throw new Error(`${fontPath} is a font collection`);
-  }
-
-  return loadedFont;
-};
-
 const printFontInfo = (font: Font) => {
   console.table({
     familyName: font.familyName,
@@ -57,7 +51,6 @@ const printFeatures = (font: Font) => {
   );
   const unique = [...new Set(supported)];
 
-  // [ 'fina', 'init', 'liga', 'mark', 'medi', 'rlig', 'mkmk' ]
   console.log(unique);
 
   const missing = ARABIC_FEATURES.filter(
@@ -95,30 +88,18 @@ const printGlyphRun = (font: Font, text: string) => {
   console.table(result);
 };
 
-const renderSvg = (font: Font, text: string) => {
-  const run = font.layout(text);
-  let penX = 0;
-
-  const width = run.advanceWidth;
-  const height = font.ascent - font.descent;
-
-  const pathData = run.glyphs.map((glyph, index) => {
-    const { xAdvance, xOffset, yOffset } = run.positions[index];
-
-    const d = glyph.path
-      .scale(1, -1)
-      .translate(penX + xOffset, -yOffset)
-      .toSVG();
-
-    penX += xAdvance;
-    return d;
-  });
-
-  const viewBox = `0 ${-font.ascent} ${width} ${height}`;
+const toPreviewSvg = (shaped: ShapedText) => {
+  const viewBox = `0 ${-shaped.ascent} ${shaped.advanceWidth} ${shaped.ascent - shaped.descent}`;
+  const d = shaped.glyphs.map((glyph) => glyph.d).join(" ");
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}">
-  <path d="${pathData.join(" ")}" fill="black" />
+  <path d="${d}" fill="black" />
 </svg>`;
+};
+
+const renderSvg = (font: Font, text: string) => {
+  const shaped = layoutText(font, text);
+  return toPreviewSvg(shaped);
 };
 
 const saveFile = (content: string, fileName: string) => {
@@ -209,7 +190,13 @@ saveFile(renderComparePage(rows, SAMPLE), "compare.html");
 
 // stripping harakat before shaping must give exactly the same outline
 // as the unvocalised word.
-const amiri = loadFont(FONTS[0].path);
+const amiri = rows.find(({ key }) => key === "amiri")?.font;
+
+if (!amiri) {
+  throw new Error('No font with key "amiri" in FONTS');
+}
+
 const isSameOutline =
-  renderSvg(amiri, stripHarakat(DIHLI_VOCALISED)) === renderSvg(amiri, DIHLI);
+  JSON.stringify(layoutText(amiri, stripHarakat(DIHLI_VOCALISED))) ===
+  JSON.stringify(layoutText(amiri, DIHLI));
 console.log(`stripHarakat keeps the outline identical: ${isSameOutline}`);
