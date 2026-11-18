@@ -2,6 +2,13 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useTransition } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { setLocale } from "@/i18n/actions";
 import { type Locale, locales } from "@/i18n/config";
 
@@ -11,25 +18,33 @@ const LABELS: Record<Locale, string> = {
 };
 
 const LocaleSwitcher = () => {
-  const current = useLocale();
+  const currentLocale = useLocale();
   const t = useTranslations("localeSwitcher");
   const [isPending, startTransition] = useTransition();
 
   return (
-    <fieldset aria-label={t("label")}>
-      {locales.map((locale) => (
-        <button
-          key={locale}
-          type="button"
-          lang={locale}
-          aria-pressed={locale === current}
-          disabled={isPending}
-          onClick={() => startTransition(() => setLocale(locale))}
-        >
-          {LABELS[locale]}
-        </button>
-      ))}
-    </fieldset>
+    <Select
+      items={LABELS}
+      value={currentLocale}
+      disabled={isPending}
+      onValueChange={(value) => {
+        if (!value || value === currentLocale) {
+          return;
+        }
+        startTransition(() => setLocale(value));
+      }}
+    >
+      <SelectTrigger aria-label={t("label")}>
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {locales.map((locale) => (
+          <SelectItem key={locale} value={locale} lang={locale}>
+            {LABELS[locale]}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 };
 
