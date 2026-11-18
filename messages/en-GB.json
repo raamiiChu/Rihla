@@ -5,7 +5,50 @@
   },
   "home": {
     "title": "Rihla",
-    "intro": "Ibn Battuta's travelogue is called <i>Rihla</i>."
+    "intro": "Ibn Battuta's travelogue is called <i>Rihla</i>.",
+    "scrollHint": "Scroll to begin",
+    "stops": {
+      "tangier": {
+        "name": "Tangier",
+        "year": "1325",
+        "line": "Aged twenty-one, he leaves his birthplace for the pilgrimage to Mecca."
+      },
+      "mecca": {
+        "name": "Mecca",
+        "year": "c. 1326",
+        "line": "Meant to be the destination, it becomes the beginning."
+      },
+      "samarkand": {
+        "name": "Samarkand",
+        "year": "Early 1330s",
+        "line": "He describes it as one of the finest and most beautiful cities."
+      },
+      "delhi": {
+        "name": "Delhi",
+        "year": "Mid-1330s to 1342",
+        "line": "He records serving as a judge at the court of Sultan Muhammad bin Tughluq."
+      },
+      "maldives": {
+        "name": "Maldives",
+        "year": "c. 1343",
+        "line": "By his account, he serves as a judge once more, this time on the islands."
+      },
+      "quanzhou": {
+        "name": "Quanzhou (Zaitun)",
+        "year": "c. 1345–1346",
+        "line": "He writes of its harbour as one of the largest in the world."
+      },
+      "timbuktu": {
+        "name": "Timbuktu",
+        "year": "c. 1353",
+        "line": "Across the Sahara, first to the capital of Mali, then on to the Niger."
+      },
+      "fez": {
+        "name": "Fez",
+        "year": "1354",
+        "line": "His travels over, he dictates the <i>Rihla</i>."
+      }
+    }
   },
   "localeSwitcher": {
     "label": "Language"
