@@ -38,7 +38,7 @@ const UNITS: Unit[] = [
     title: "R3F 更新迴圈與 Lenis 交接",
     phase: 1,
     kind: "page",
-    status: "todo",
+    status: "done",
   },
   {
     id: "04",
