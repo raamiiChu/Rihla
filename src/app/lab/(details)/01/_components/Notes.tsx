@@ -32,6 +32,16 @@ const STEPS: Step[] = [
   { id: "compare", title: "跟瀏覽器的排版結果比對", done: true },
   { id: "noto", title: "換成 Noto Naskh Arabic 比較", done: true },
   { id: "harakat", title: "移除標音符號（stripHarakat 與測試）", done: true },
+  {
+    id: "extract",
+    title: (
+      <>
+        整理成正式模組：<Code>scripts/lib/shape.ts</Code> 與 characterisation
+        test
+      </>
+    ),
+    done: true,
+  },
 ];
 
 type MetricRow = {
@@ -139,8 +149,11 @@ const CONCEPTS: Concept[] = [
       <>
         字型沿用數學慣例，Y 軸朝上；SVG 與螢幕源自掃描線，Y 軸朝下。所以要{" "}
         <Code>scale(1, -1)</Code>。翻轉後字的上半部落在負數區域，
-        <Code>viewBox</Code> 的最小 y 要從 <Code>-ascent</Code> 開始。three.js
-        也是 Y 軸朝上，到單元 10 要留意資料在每個階段用的是哪一種座標。
+        <Code>viewBox</Code> 的最小 y 要從 <Code>-ascent</Code>{" "}
+        開始。座標分成兩段：中間階段統一用 SVG 座標（Y 軸朝下），跟 Inkscape
+        匯出的 SVG 一致；寫入 JSON 前由 <Code>build-glyphs.ts</Code> 統一翻回 Y
+        軸朝上，交給 three.js。<Code>ShapedText</Code> 的 <Code>ascent</Code>、
+        <Code>descent</Code> 仍是字型座標，方向跟輪廓相反。
       </>
     ),
   },
@@ -309,6 +322,24 @@ const VERIFICATIONS: Verification[] = [
       </>
     ),
   },
+  {
+    id: "test",
+    body: (
+      <>
+        執行 <Code>pnpm test</Code>：<Code>scripts/lib/shape.test.ts</Code>{" "}
+        通過，鎖定 fontkit 3.0.0 回傳視覺順序的行為。
+      </>
+    ),
+  },
+  {
+    id: "harakat",
+    body: (
+      <>
+        <Code>pnpm lab:01</Code> 的最後一行印出{" "}
+        <Code>stripHarakat keeps the outline identical: true</Code>。
+      </>
+    ),
+  },
 ];
 
 const Notes = () => (
@@ -336,6 +367,11 @@ const Notes = () => (
           <strong>採用 Amiri</strong>：與 DOM 引言使用的字型一致，而且以 Bulaq
           印刷體為基礎的古典 Naskh 風格，符合 14
           世紀的主題。霓虹燈管般的輪廓效果，到單元 10 再確認一次。
+        </li>
+        <li>
+          排版邏輯已整理到 <Code>scripts/lib/shape.ts</Code>：
+          <Code>layoutText</Code> 回傳 SVG 座標的純資料（每個字形一個{" "}
+          <Code>d</Code>），單元 10 直接取用。
         </li>
       </ul>
     </NotesSection>
