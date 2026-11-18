@@ -9,6 +9,8 @@ const SmoothScroll = () => {
   useEffect(() => {
     console.log("created");
     const lenis = new Lenis({ autoRaf: false });
+    // The scroll event only reports changes; seed the store with the current position.
+    useScrollStore.getState().setProgress(lenis.progress);
 
     const unsubscribe = lenis.on("scroll", ({ progress }) => {
       useScrollStore.getState().setProgress(progress);

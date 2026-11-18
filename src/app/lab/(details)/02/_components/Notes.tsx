@@ -202,6 +202,21 @@ const CONCEPTS: Concept[] = [
     ),
   },
   {
+    title: "destroy() 會清掉所有監聽，但 unsubscribe 仍是好習慣",
+    body: (
+      <>
+        <Code>lenis.destroy()</Code> 內部會清空 emitter（
+        <Code>this.events = {"{}"}</Code>），所有 <Code>lenis.on()</Code>{" "}
+        註冊的監聽一併移除。監聽與 Lenis 在同一個 effect
+        裡一起建立、一起銷毀時，<Code>unsubscribe()</Code>{" "}
+        是多餘的，這裡保留只是為了明確。正式專案中 Lenis
+        可能放在根層級、活得比監聽它的元件久，元件卸載時 Lenis
+        不會被銷毀，這時一定要自己 <Code>unsubscribe()</Code>
+        ，否則監聽會一直留著，造成記憶體洩漏。
+      </>
+    ),
+  },
+  {
     title: "Lenis 預設遵循減少動態效果",
     body: (
       <>
@@ -273,6 +288,29 @@ const CONCEPTS: Concept[] = [
 ];
 
 const PITFALLS: Pitfall[] = [
+  {
+    title: "只訂閱 scroll 事件，沒有讀初始值",
+    symptom:
+      "捲到中間後重新整理，畫面還原在中間，progress 與 stationIndex 卻停在 0，要捲動一下才跳到正確的值。",
+    cause: (
+      <>
+        瀏覽器的捲動還原把頁面放回原位，但沒有發生捲動，Lenis 不會發出{" "}
+        <Code>&quot;scroll&quot;</Code>{" "}
+        事件。事件只回報「變化」，不回報「初始狀態」，store
+        在第一次變化前一直是初始值。單元 03 延遲載入 Canvas
+        時才發現：方塊先出現在頂端，捲動後才瞬間移到正確位置。
+      </>
+    ),
+    fix: (
+      <>
+        建立 Lenis 後先以 <Code>lenis.progress</Code> 寫入一次
+        store，再訂閱後續變化。React 的 <Code>useSyncExternalStore</Code>{" "}
+        同時要求 <Code>subscribe</Code> 與 <Code>getSnapshot</Code>
+        也是同樣的道理。捲動還原的時機不一定早於 effect，若仍偶爾停在
+        0，代表還原發生在之後，需要另外處理。
+      </>
+    ),
+  },
   {
     title: "Lenis 寫在模組最上層",
     symptom: "可能在伺服器端報錯；離開頁面後，其他頁面的捲動仍被接管。",
@@ -388,6 +426,10 @@ const VERIFICATIONS: Verification[] = [
     ),
   },
   {
+    id: "initial-progress",
+    body: "捲到中間後重新整理，不捲動的情況下 ProgressReadout 與 StationReadout 就顯示目前位置的值。",
+  },
+  {
     id: "highlight-updates",
     body: (
       <>
@@ -412,7 +454,7 @@ const Notes = () => (
     </NotesSection>
 
     <NotesSection title="結論">
-      <ul className="list-disc space-y-2 ps-5 text-parchment/90 marker:text-muted/70">
+      <ul className="list-disc space-y-2 ps-5 text-parchment/90 marker:text-muted-foreground/70">
         <li>
           同一個 store，
           <strong>
