@@ -31,7 +31,7 @@ function DataTable<T extends Row>({
               <th
                 key={column.key}
                 scope="col"
-                className={`px-3 py-2 font-normal ${column.numeric ? "text-end" : "text-start"}`}
+                className={`px-3 py-2 font-normal whitespace-nowrap ${column.numeric ? "text-end" : "text-start"}`}
               >
                 {column.label}
               </th>
