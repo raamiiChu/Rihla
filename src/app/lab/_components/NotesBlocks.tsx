@@ -80,7 +80,7 @@ const PitfallList = ({ items }: { items: Pitfall[] }) => (
       {items.map((item) => (
         <li
           key={item.title}
-          className="rounded-lg border border-parchment/10 bg-parchment/[0.03] p-5"
+          className="rounded-lg border border-parchment/10 bg-parchment/3 p-5"
         >
           <h3 className="font-semibold text-parchment">{item.title}</h3>
           <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
