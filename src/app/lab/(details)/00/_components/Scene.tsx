@@ -1,11 +1,12 @@
 import { Canvas } from "@react-three/fiber";
 import { MathUtils } from "three";
+import { CANVAS_BG_COLOR } from "@/app/lab/const";
 
 const Scene = () => {
   return (
     <Canvas>
       {/* Matches the page background (--color-night in globals.css). */}
-      <color attach="background" args={["#07080d"]} />
+      <color attach="background" args={[CANVAS_BG_COLOR]} />
       <directionalLight position={[-2, 0, 2]} />
       <ambientLight intensity={0.75} />
 

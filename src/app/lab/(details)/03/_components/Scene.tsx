@@ -1,5 +1,6 @@
 import { addEffect, Canvas } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
+import { CANVAS_BG_COLOR } from "@/app/lab/const";
 import { Button } from "@/components/ui/button";
 import { driveWithFallback, driveWithR3f } from "../_utils/scrollDriver";
 import ProgressBox from "./ProgressBox";
@@ -56,7 +57,7 @@ const Scene = () => {
             .getExtension("WEBGL_lose_context");
         }}
       >
-        <color attach="background" args={["#07080d"]} />
+        <color attach="background" args={[CANVAS_BG_COLOR]} />
         <directionalLight position={[-2, 0, 2]} />
         <ambientLight intensity={0.75} />
 

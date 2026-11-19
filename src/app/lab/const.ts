@@ -133,5 +133,8 @@ const UNITS: Unit[] = [
   },
 ];
 
+const CANVAS_BG_COLOR = "#07080d" as const;
+export const GOLD_COLOR = "#d9b26a" as const;
+
 export type { Phase, Unit, UnitStatus };
-export { PHASES, UNITS };
+export { CANVAS_BG_COLOR, PHASES, UNITS };
