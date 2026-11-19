@@ -48,8 +48,14 @@ const NotesSection = ({
 
 type Concept = { title: string; body: ReactNode };
 
-const ConceptList = ({ items }: { items: Concept[] }) => (
-  <NotesSection title="知識點">
+const ConceptList = ({
+  items,
+  title = "知識點",
+}: {
+  items: Concept[];
+  title?: string;
+}) => (
+  <NotesSection title={title}>
     <dl className="space-y-6">
       {items.map((item) => (
         <div key={item.title}>
