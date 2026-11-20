@@ -1140,7 +1140,8 @@ const VERIFICATIONS: Verification[] = [
     id: "pure",
     body: (
       <>
-        <Code>rail.ts</Code> 沒有 import 任何 React 或 R3F 的東西，
+        <Code>src/lib/camera/rail.ts</Code> 沒有 import 任何 React 或 R3F
+        的東西，
         <Code>useFrame</Code> 裡沒有 <Code>new</Code>
         ，每幀呼叫的函式也沒有會配置物件的預設參數。
       </>

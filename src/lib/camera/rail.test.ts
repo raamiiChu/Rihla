@@ -1,6 +1,5 @@
 import { CatmullRomCurve3, MathUtils, Vector3 } from "three";
 import { describe, expect, it } from "vitest";
-import { LOOP_CURVE, WAVE_CURVE } from "./curve";
 import {
   buildRailLUT,
   createCameraState,
@@ -86,9 +85,8 @@ const UNEVEN_CURVE = new CatmullRomCurve3([
   new Vector3(1, 0, 0),
   new Vector3(10, 0, 0),
 ]);
-// The default of 200 leaves getPointAt about 5e-5 off, above TOLERANCE. The
-// same value as WAVE_CURVE in curve.ts.
-UNEVEN_CURVE.arcLengthDivisions = WAVE_CURVE.arcLengthDivisions;
+// The default of 200 leaves getPointAt about 5e-5 off, above TOLERANCE.
+UNEVEN_CURVE.arcLengthDivisions = 1000;
 
 describe("buildRailLUT on unevenly spaced control points", () => {
   it("places samples by arc length, not by curve parameter", () => {
@@ -194,9 +192,21 @@ describe("getCameraState with 3 samples on a straight rail", () => {
   );
 });
 
-// LOOP_CURVE climbs, runs backwards over the top and comes down again, so its
-// tangent passes close to straight up and straight down. A fixed world up
-// breaks there.
+// A vertical loop, kept here rather than imported from the lab so that
+// experiments there cannot change what these tests check. It climbs, runs
+// backwards over the top and comes down again, so its tangent passes close to
+// straight up and straight down, where a fixed world up breaks. Its x drifts
+// from entry to exit, so the loop is not planar: transport alone leaves it
+// rolled by about 41 degrees, which the levelling tests rely on.
+const LOOP_CURVE = new CatmullRomCurve3([
+  new Vector3(1, 0, 0),
+  new Vector3(-5, 2, -45),
+  new Vector3(-3, 20, -45),
+  new Vector3(-1, 20, -10),
+  new Vector3(5, 2, -10),
+  new Vector3(1, 0, -60),
+]);
+LOOP_CURVE.arcLengthDivisions = 1000;
 describe("orientation on a vertical loop", () => {
   const railLUT = buildRailLUT(LOOP_CURVE);
 

@@ -3,12 +3,12 @@ import { useFrame } from "@react-three/fiber";
 import { type RefObject, useRef } from "react";
 import type * as THREE from "three";
 import { CameraHelper } from "three";
-import { useScrollStore } from "@/stores/scroll";
 import {
   createCameraState,
   getCameraState,
   type RailLUT,
-} from "../_utils/rail";
+} from "@/lib/camera/rail";
+import { useScrollStore } from "@/stores/scroll";
 
 const cameraState = createCameraState();
 

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Vector3 } from "three";
-import { OFFSET, type RailLUT, STRIDE } from "../_utils/rail";
+import { OFFSET, type RailLUT, STRIDE } from "@/lib/camera/rail";
 
 const POINTS_PER_SEGMENT = 2;
 const POSITION_SIZE = 3;

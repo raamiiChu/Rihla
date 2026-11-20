@@ -1,6 +1,6 @@
 import { Box3, type CatmullRomCurve3, Vector3 } from "three";
+import { buildRailLUT, type RailLUT } from "@/lib/camera/rail";
 import { LOOP_CURVE, WAVE_CURVE } from "./curve";
-import { buildRailLUT, type RailLUT } from "./rail";
 
 // Few enough samples for the debug points and up lines to stay readable.
 export const DEBUG_SAMPLES = 64;

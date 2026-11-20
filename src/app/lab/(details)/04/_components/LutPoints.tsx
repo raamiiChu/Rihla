@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { type CatmullRomCurve3, Vector3 } from "three";
-import { OFFSET, type RailLUT, STRIDE } from "../_utils/rail";
+import { OFFSET, type RailLUT, STRIDE } from "@/lib/camera/rail";
 
 const POSITION_SIZE = 3;
 
