@@ -45,7 +45,7 @@ const UNITS: Unit[] = [
     title: "曲線與鏡頭軌道",
     phase: 1,
     kind: "page",
-    status: "todo",
+    status: "done",
   },
   {
     id: "05",
