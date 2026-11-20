@@ -362,12 +362,41 @@ const LEVELLING: Concept[] = [
     title: "速率依弧長計算：指數衰減",
     body: (
       <>
-        每一步的比例是 <Code>1 − Math.exp(−rate × stepLength)</Code>
+        <Code>up.lerp(target, w)</Code> 做一次，傾斜剩下原本的 (1 − w) 倍；走 n
+        步剩 (1 −
+        w)ⁿ，分段走時各段剩下的比例相乘。能把「距離相加」變成「比例相乘」的只有次方，所以每一步的比例是{" "}
+        <Code>1 − Math.exp(−rate × stepLength)</Code>
         ，前進距離 d 後剩下的傾斜是 <Code>e^(−rate × d)</Code>
-        。指數讓兩個半步的效果完全等於一個整步，所以結果與取樣數無關；寫成「每個取樣點回正
+        。指數讓兩個半步的效果完全等於一個整步，所以只看距離時結果與取樣數無關（加上門檻後是近似，見「門檻乘在指數外是近似」）；寫成「每個取樣點回正
         1%」時，1024 與 256 個取樣點的出口差了 16.6°。rate 0.1 約每前進 10
         單位傾斜剩 37%。LUT 依弧長等分，步長在迴圈外算一次：
         <Code>curve.getLength() / (samples - 1)</Code>。
+      </>
+    ),
+  },
+  {
+    title: "減半距離：ln 2 ÷ rate",
+    body: (
+      <>
+        傾斜剩一半時 <Code>e^(−rate × d) = 0.5</Code>，解出{" "}
+        <Code>d = ln 2 ÷ rate</Code>。ln 2 ≈ 0.693 是「e 的幾次方等於 2」（
+        <Code>Math.LN2</Code>）。rate 0.1 約每 6.93 單位傾斜減半，
+        <Code>LOOP_CURVE</Code> 全長約 173，等於減半約 25 次。底數可以換：
+        <Code>1 − 0.5 ** (stepLength / halfDistance)</Code>{" "}
+        與目前寫法完全等價，條件是 <Code>rate = ln 2 ÷ halfDistance</Code>
+        。需要的是次方，e 只是讓 rate 有直接的意義：步長很小時{" "}
+        <Code>1 − e^(−x) ≈ x</Code>，每前進 1 單位約回正 rate。
+      </>
+    ),
+  },
+  {
+    title: "與幀率無關的平滑是同一招",
+    body: (
+      <>
+        動畫常見的 <Code>lerp(a, b, 1 − Math.exp(−k × dt))</Code>{" "}
+        讓追蹤速度不受幀率影響；這裡把時間 dt 換成弧長
+        stepLength。依弧長而不是時間，回正只取決於鏡頭在軌道上的位置，與捲動快慢、幀率無關，所以能在建表時一次算好，
+        <Code>getCameraState</Code> 仍是純函式。
       </>
     ),
   },
@@ -384,13 +413,30 @@ const LEVELLING: Concept[] = [
     ),
   },
   {
+    title: "為什麼需要垂直門檻",
+    body: (
+      <>
+        target 是 <Code>WORLD_UP</Code> 扣掉它在 tangent 上的影子，normalise
+        前剩下的長度是 cos（坡度）。越接近垂直越短，normalise
+        會把微小的差異放大，target 的方向隨取樣點大幅擺動；完全垂直時長度為
+        0，沒有方向，和固定 up 在垂直段失效是同一個原因。往不穩定的 target
+        拉，等於把翻轉帶回來，所以越陡越不回正。53° 時剩下的長度仍有
+        0.6，門檻刻意留了餘裕。
+      </>
+    ),
+  },
+  {
     title: "為什麼需要正立門檻",
     body: (
       <>
         迴圈頂點的 tangent 是水平的，垂直門檻全部放行，但鏡頭頭朝下，up 與
-        target 幾乎相反。兩個相反的向量 lerp 會經過接近零的向量，normalise
-        後方向不穩定，等於在迴圈中段再翻一次（上表「只有垂直門檻」）。正立門檻要求{" "}
-        <Code>up · target</Code> 夠大才回正。代價是傾斜超過 90°
+        target 夾角接近 180°。這裡是不穩定平衡：up 與 target 都垂直於
+        tangent，回正每步讓 up 轉的角度約與夾角的 sin 成正比，180°
+        附近幾乎不動，但只要偏一點就越轉越快，最後繞 tangent
+        轉半圈。往哪一側轉取決於極小的數值差異，取樣數一改結果就可能相反（上表「只有垂直門檻」1024
+        與 256 相差 153°）。問題不在向量變短：1024 個取樣點時每步 weight 最多約
+        0.017，lerp 的結果長度仍有 0.97。正立門檻要求 <Code>up · target</Code>{" "}
+        夠大才回正，讓倒立的鏡頭維持倒立。代價是傾斜超過 90°
         的鏡頭永遠不會被回正，正式軌道沒有迴圈，可以接受。
       </>
     ),
@@ -403,6 +449,31 @@ const LEVELLING: Concept[] = [
         <Code>up · target</Code> 是鏡頭有多正立（正立門檻），
         <Code>up · tangent</Code> 是 up 偏離垂直平面多少（
         <Code>makePerpendicular</Code> 內部，做完後永遠是 0）。
+      </>
+    ),
+  },
+  {
+    title: "門檻用 dot 值設定，不是角度",
+    body: (
+      <>
+        兩個單位向量的 dot 就是夾角的 cos，所以門檻直接寫 dot
+        值，每個取樣點不必算 <Code>acos</Code>。垂直門檻的{" "}
+        <Code>|tangent · WORLD_UP|</Code> 是坡度的 sin：0.5 為 30°、0.8 約
+        53°。正立門檻的 <Code>up · target</Code> 是傾斜的 cos：0.5 為 60°、0 為
+        90°，傾斜越小值越大，所以不必再取 1 −。
+      </>
+    ),
+  },
+  {
+    title: "門檻乘在指數外是近似",
+    body: (
+      <>
+        目前 <Code>weight = 門檻 × (1 − e^(−rate × stepLength))</Code>
+        。嚴格與取樣數無關的寫法是把門檻放進指數：
+        <Code>1 − e^(−rate × 門檻 × stepLength)</Code>
+        ，等於「門檻開一半，rate 就減半」。步長小時 <Code>1 − e^(−x) ≈ x</Code>
+        ，兩者幾乎相同：<Code>LOOP_CURVE</Code> 在 64、256、1024
+        個取樣點，兩種寫法的出口傾斜到小數第三位都一樣，目前的寫法已經足夠。
       </>
     ),
   },
@@ -1120,6 +1191,22 @@ const PITFALLS: Pitfall[] = [
       </>
     ),
   },
+  {
+    title: "smoothstep 的參數順序：three.js 與 GLSL 相反",
+    symptom: <>門檻從 JS 搬進 shader 後算出奇怪的值，但沒有任何錯誤。</>,
+    cause: (
+      <>
+        <Code>MathUtils.smoothstep(x, min, max)</Code> 的 x 在前，GLSL 內建的{" "}
+        <Code>smoothstep(edge0, edge1, x)</Code> 的 x 在後。
+      </>
+    ),
+    fix: (
+      <>
+        搬程式碼時先對照參數順序，GLSL 寫成 <Code>smoothstep(min, max, x)</Code>
+        。
+      </>
+    ),
+  },
 ];
 
 const VERIFICATIONS: Verification[] = [
@@ -1140,8 +1227,7 @@ const VERIFICATIONS: Verification[] = [
     id: "pure",
     body: (
       <>
-        <Code>src/lib/camera/rail.ts</Code> 沒有 import 任何 React 或 R3F
-        的東西，
+        <Code>rail.ts</Code> 沒有 import 任何 React 或 R3F 的東西，
         <Code>useFrame</Code> 裡沒有 <Code>new</Code>
         ，每幀呼叫的函式也沒有會配置物件的預設參數。
       </>
