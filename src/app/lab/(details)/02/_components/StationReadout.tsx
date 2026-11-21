@@ -1,11 +1,11 @@
 "use client";
 
+import { STATION_RANGES } from "@/data/timeline";
 import { useScrollStore } from "@/stores/scroll";
-
-const STATIONS = ["丹吉爾", "麥加", "撒馬爾罕"];
 
 const StationReadout = () => {
   const stationIndex = useScrollStore((state) => state.stationIndex);
+  const stationId = STATION_RANGES[stationIndex].id;
 
   console.log("StationReadout rendered", stationIndex);
 
@@ -14,7 +14,7 @@ const StationReadout = () => {
       aria-live="polite"
       className="flex flex-col items-center justify-center gap-4"
     >
-      <span>{STATIONS[stationIndex]}</span>
+      <span>{stationId}</span>
       <span>{`stationIndex: ${stationIndex}`}</span>
     </output>
   );

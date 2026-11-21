@@ -132,7 +132,8 @@ const CONCEPTS: Concept[] = [
       <>
         用邊界陣列加上 <Code>findIndex</Code>，不寫成{" "}
         <Code>Math.floor(progress * 3)</Code>：之後每站的長度不會相同。單元 05
-        只要把邊界陣列換成從 timeline 讀取。
+        已把邊界陣列換成由 timeline 的權重換算（<Code>getStationIndex</Code>
+        ）。
       </>
     ),
   },

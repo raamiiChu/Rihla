@@ -48,7 +48,8 @@ const Notes = () => (
         </li>
         <li>
           store 已搬進正式專案的 <Code>src/stores/scroll.ts</Code>
-          。stationIndex 目前還是寫死的邊界陣列，單元 05 改成從 timeline 讀取。
+          。單元 05 起，stationIndex 由 <Code>src/data/timeline.ts</Code>{" "}
+          的權重換算出邊界後計算，畫面直接顯示站點 id。
         </li>
       </ul>
     </NotesSection>

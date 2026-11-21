@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { STATION_RANGES } from "@/data/timeline";
+import { getStationIndex } from "@/lib/timeline/stations";
 
 type ScrollState = {
   progress: number;
@@ -6,16 +8,12 @@ type ScrollState = {
   setProgress: (progress: number) => void;
 };
 
-const STATION_BOUNDARIES = [0.3, 0.65, 1];
-
 export const useScrollStore = create<ScrollState>()((set) => ({
   progress: 0,
   stationIndex: 0,
   setProgress: (progress) =>
     set({
       progress,
-      stationIndex: STATION_BOUNDARIES.findIndex(
-        (boundary) => progress <= boundary,
-      ),
+      stationIndex: getStationIndex(progress, STATION_RANGES),
     }),
 }));
