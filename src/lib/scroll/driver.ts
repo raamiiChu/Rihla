@@ -1,4 +1,5 @@
 import type Lenis from "lenis";
+import type { ScrollToOptions } from "lenis";
 
 export type Driver = "fallback" | "r3f" | "none";
 type Source = Exclude<Driver, "none">;
@@ -105,4 +106,20 @@ export const getStats = () => {
     counts: { ...counts },
     duplicates,
   };
+};
+
+type ScrollToProgressOptions = Pick<
+  ScrollToOptions,
+  "immediate" | "duration" | "onComplete"
+>;
+
+export const scrollToProgress = (
+  progress: number,
+  options?: ScrollToProgressOptions,
+) => {
+  if (lenis === null) {
+    return;
+  }
+
+  lenis.scrollTo(progress * lenis.limit, options);
 };
