@@ -52,7 +52,7 @@ const UNITS: Unit[] = [
     title: "迷你時間軸與 SKIP",
     phase: 1,
     kind: "page",
-    status: "todo",
+    status: "done",
   },
   {
     id: "06",
