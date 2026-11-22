@@ -32,7 +32,7 @@ const GUIDES = [
  * دهلي as shaped by fontkit, with the font metrics and the pen stops that
  * place each glyph. Coordinates are font units in SVG's y-down axis.
  */
-const GlyphDiagram = () => (
+const GlyphDiagram = ({ title }: { title: string }) => (
   <div className="flex h-full items-center justify-center p-6 lg:p-12">
     <svg
       viewBox={viewBox}
@@ -40,9 +40,7 @@ const GlyphDiagram = () => (
       aria-labelledby="glyph-diagram-title"
       className="h-auto max-h-full w-full"
     >
-      <title id="glyph-diagram-title">
-        دهلي 的排版結果，標出 ascent、基線、descent 與每個字形的 xAdvance。
-      </title>
+      <title id="glyph-diagram-title">{title}</title>
 
       {GUIDES.map((guide) => (
         <g key={guide.id}>

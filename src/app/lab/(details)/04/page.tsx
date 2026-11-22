@@ -1,11 +1,14 @@
 import { DemoPane, NotesPane } from "@/app/lab/_components";
 import { SmoothScroll } from "@/components";
 import { Notes, SceneLoader } from "./_components";
+import { useUnit04Content } from "./_content";
 
 const Lab04Page = () => {
+  const content = useUnit04Content();
+
   return (
     <>
-      <DemoPane caption="捲動時鏡頭沿含垂直迴圈的 Catmull-Rom 曲線前進，可切換成俯瞰視角。">
+      <DemoPane caption={content.demoCaption}>
         <SceneLoader />
       </DemoPane>
       <NotesPane>

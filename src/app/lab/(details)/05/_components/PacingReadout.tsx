@@ -7,18 +7,15 @@ import { useScrollStore } from "@/stores/scroll";
 import { STATION_RAIL_POSITIONS } from "../_utils/rail";
 import { DEMO_STATION_RANGES } from "../_utils/timeline";
 
-const ROWS = [
-  { key: "station", label: "當前站點" },
-  { key: "phase", label: "階段" },
-  { key: "progress", label: "progress" },
-  { key: "rail", label: "軌道位置 u" },
-  { key: "skip", label: "SKIP 目的地" },
-] as const;
-type Row = (typeof ROWS)[number]["key"];
+const ROWS = ["station", "phase", "progress", "rail", "skip"] as const;
+type Row = (typeof ROWS)[number];
+
+/** One label per row, plus the two phase names written into the phase cell. */
+type PacingLabels = Record<Row | "flight" | "dwell", string>;
 
 const PLACEHOLDER = "—";
 
-const PacingReadout = () => {
+const PacingReadout = ({ labels }: { labels: PacingLabels }) => {
   const cellRefs = useRef<Partial<Record<Row, HTMLElement | null>>>({});
 
   useEffect(() => {
@@ -42,7 +39,7 @@ const PacingReadout = () => {
 
       write("progress", progress.toFixed(4));
       write("station", `${index} ${range.id}`);
-      write("phase", inFlight ? "飛行" : "停留");
+      write("phase", inFlight ? labels.flight : labels.dwell);
       write("rail", rail.toFixed(4));
       write(
         "skip",
@@ -60,13 +57,13 @@ const PacingReadout = () => {
     // Runs only when the store is written, unlike a rAF loop that polls
     // every frame. The DOM is written directly, so React never re-renders.
     return useScrollStore.subscribe((state) => update(state.progress));
-  }, []);
+  }, [labels]);
 
   return (
     <dl className="grid grid-cols-2 gap-x-6 gap-y-3 rounded-lg border border-border bg-background/70 px-4 py-3 backdrop-blur-sm sm:grid-cols-5">
-      {ROWS.map(({ key, label }) => (
+      {ROWS.map((key) => (
         <div key={key} className="space-y-1">
-          <dt className="text-xs text-muted-foreground">{label}</dt>
+          <dt className="text-xs text-muted-foreground">{labels[key]}</dt>
           <dd
             ref={(element) => {
               cellRefs.current[key] = element;
@@ -81,4 +78,5 @@ const PacingReadout = () => {
   );
 };
 
+export type { PacingLabels };
 export default PacingReadout;

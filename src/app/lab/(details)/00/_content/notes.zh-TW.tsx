@@ -4,6 +4,7 @@ import {
   type Pitfall,
   type Verification,
 } from "@/app/lab/_components";
+import type { Unit00Content } from "./types";
 
 const CONCEPTS: Concept[] = [
   {
@@ -190,4 +191,18 @@ const VERIFICATIONS: Verification[] = [
   },
 ];
 
-export { CONCEPTS, PITFALLS, VERIFICATIONS };
+const CONTENT: Unit00Content = {
+  intro: (
+    <>
+      建立 <Code>/lab</Code> 路由，只在正式網址封鎖；並用 <Code>dynamic</Code>{" "}
+      在客戶端載入 R3F 的 <Code>&lt;Canvas&gt;</Code>
+      。旁邊的方塊就是這個頁面的 Canvas。
+    </>
+  ),
+  demoCaption: "以 R3F 渲染的橘色方塊，示範在客戶端載入 Canvas。",
+  concepts: CONCEPTS,
+  pitfalls: PITFALLS,
+  verifications: VERIFICATIONS,
+};
+
+export default CONTENT;

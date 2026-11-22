@@ -1,14 +1,12 @@
-import type { ReactNode } from "react";
 import {
   Ar,
   Code,
-  type Column,
   type Concept,
   type Pitfall,
   type Step,
   type Verification,
 } from "@/app/lab/_components";
-import { AMIRI_METRICS, DIHLI_GLYPHS } from "../_components/dihli";
+import type { Unit01Content } from "./types";
 
 const STEPS: Step[] = [
   { id: "font-info", title: "開啟字型，印出度量值與 feature", done: true },
@@ -36,60 +34,6 @@ const STEPS: Step[] = [
     done: true,
   },
 ];
-
-type MetricRow = {
-  id: string;
-  font: string;
-  unitsPerEm: number;
-  ascent: number;
-  descent: number;
-};
-
-const METRIC_COLUMNS: Column<MetricRow>[] = [
-  { key: "font", label: "字型" },
-  { key: "unitsPerEm", label: "unitsPerEm", numeric: true },
-  { key: "ascent", label: "ascent", numeric: true },
-  { key: "descent", label: "descent", numeric: true },
-];
-
-const METRIC_ROWS: MetricRow[] = [
-  { id: "amiri", font: "Amiri Regular（採用）", ...AMIRI_METRICS },
-  {
-    id: "noto",
-    font: "Noto Naskh Arabic Regular",
-    unitsPerEm: 1000,
-    ascent: 1069,
-    descent: -634,
-  },
-];
-
-type GlyphRow = {
-  id: string;
-  index: number;
-  letter: ReactNode;
-  codePoint: string;
-  form: string;
-  shapedId: number;
-  nominalId: number;
-  xAdvance: number;
-};
-
-const GLYPH_COLUMNS: Column<GlyphRow>[] = [
-  { key: "index", label: "i", numeric: true },
-  { key: "letter", label: "字母" },
-  { key: "codePoint", label: "碼位" },
-  { key: "form", label: "字形" },
-  { key: "shapedId", label: "shapedId", numeric: true },
-  { key: "nominalId", label: "nominalId", numeric: true },
-  { key: "xAdvance", label: "xAdvance", numeric: true },
-];
-
-const GLYPH_ROWS: GlyphRow[] = DIHLI_GLYPHS.map((glyph, index) => ({
-  id: glyph.codePoint,
-  index,
-  ...glyph,
-  letter: <Ar>{glyph.letter}</Ar>,
-}));
 
 const CONCEPTS: Concept[] = [
   {
@@ -335,13 +279,78 @@ const VERIFICATIONS: Verification[] = [
   },
 ];
 
-export {
-  CONCEPTS,
-  GLYPH_COLUMNS,
-  GLYPH_ROWS,
-  METRIC_COLUMNS,
-  METRIC_ROWS,
-  PITFALLS,
-  STEPS,
-  VERIFICATIONS,
+const CONCLUSIONS: Verification[] = [
+  {
+    id: "visual-order",
+    body: (
+      <>
+        fontkit 回傳的 <Code>glyphs</Code> 是<strong>視覺順序</strong>
+        ：第 0 個是畫面最左邊的 <Ar>ي</Ar>，所以筆從 x = 0 往右走即可。
+      </>
+    ),
+  },
+  {
+    id: "matches-browser",
+    body: (
+      <>
+        兩套字型排出的 <Ar>دهلي رحلة لا</Ar> 都跟瀏覽器（HarfBuzz）一致，包括
+        Noto 用偏移量擺放的點。fontkit 可以用在這個專案。
+      </>
+    ),
+  },
+  {
+    id: "amiri",
+    body: (
+      <>
+        <strong>採用 Amiri</strong>：與 DOM 引言使用的字型一致，而且以 Bulaq
+        印刷體為基礎的古典 Naskh 風格，符合 14
+        世紀的主題。霓虹燈管般的輪廓效果，到單元 10 再確認一次。
+      </>
+    ),
+  },
+  {
+    id: "module",
+    body: (
+      <>
+        排版邏輯已整理到 <Code>scripts/lib/shape.ts</Code>：
+        <Code>layoutText</Code> 回傳 SVG 座標的純資料（每個字形一個{" "}
+        <Code>d</Code>），單元 10 直接取用。
+      </>
+    ),
+  },
+];
+
+const CONTENT: Unit01Content = {
+  intro: (
+    <>
+      驗證 fontkit 能不能正確排出阿拉伯文：這是整個專案最大的技術風險。旁邊是用
+      Amiri 排出 <Ar>دهلي</Ar> 的結果，虛線標出每個字形的位置與 xAdvance。
+    </>
+  ),
+  demoCaption: (
+    <>
+      以 Amiri 排出的 <Ar>دهلي</Ar>，標出字型度量值與每個字形的 xAdvance。
+    </>
+  ),
+  diagramTitle:
+    "دهلي 的排版結果，標出 ascent、基線、descent 與每個字形的 xAdvance。",
+  steps: STEPS,
+  conclusions: { title: "目前的結論", items: CONCLUSIONS },
+  measurements: {
+    title: "量測數據",
+    metricCaption: "字型度量值",
+    glyphCaption: (
+      <>
+        Amiri 排版 <Ar>دهلي</Ar> 的每個 glyph
+      </>
+    ),
+    columns: { font: "字型", letter: "字母", codePoint: "碼位", form: "字形" },
+    adopted: "（採用）",
+    forms: { isolated: "單獨", initial: "字首", medial: "字中", final: "字尾" },
+  },
+  concepts: CONCEPTS,
+  pitfalls: PITFALLS,
+  verifications: VERIFICATIONS,
 };
+
+export default CONTENT;

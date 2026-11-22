@@ -1,12 +1,11 @@
-import type { ReactNode } from "react";
 import {
   Code,
-  type Column,
   type Concept,
   type Pitfall,
   type Step,
   type Verification,
 } from "@/app/lab/_components";
+import type { Unit02Content } from "./types";
 
 const STEPS: Step[] = [
   {
@@ -55,40 +54,6 @@ const STEPS: Step[] = [
     id: "devtools",
     title: "用 React DevTools 的 Highlight updates 驗收",
     done: true,
-  },
-];
-
-type ReadRow = {
-  id: string;
-  syntax: ReactNode;
-  rerender: string;
-  usage: string;
-};
-
-const READ_COLUMNS: Column<ReadRow>[] = [
-  { key: "syntax", label: "寫法" },
-  { key: "rerender", label: "重新渲染" },
-  { key: "usage", label: "用在哪裡" },
-];
-
-const READ_ROWS: ReadRow[] = [
-  {
-    id: "selector",
-    syntax: <Code>{"useScrollStore((s) => s.stationIndex)"}</Code>,
-    rerender: "只在選到的值改變時",
-    usage: "DOM 元件讀取低頻欄位",
-  },
-  {
-    id: "get-state",
-    syntax: <Code>useScrollStore.getState().progress</Code>,
-    rerender: "不會",
-    usage: "useFrame、rAF 迴圈、事件回呼",
-  },
-  {
-    id: "set",
-    syntax: <Code>{"getState().setProgress(…)"}</Code>,
-    rerender: "只影響有訂閱該欄位的元件",
-    usage: "Lenis 的 scroll 事件",
   },
 ];
 
@@ -360,45 +325,6 @@ const PITFALLS: Pitfall[] = [
   },
 ];
 
-type RenderRow = {
-  id: string;
-  component: string;
-  read: ReactNode;
-  highlight: string;
-  log: string;
-};
-
-const RENDER_COLUMNS: Column<RenderRow>[] = [
-  { key: "component", label: "元件" },
-  { key: "read", label: "讀取方式" },
-  { key: "highlight", label: "Highlight updates" },
-  { key: "log", label: "render log" },
-];
-
-const RENDER_ROWS: RenderRow[] = [
-  {
-    id: "station",
-    component: "StationReadout",
-    read: <Code>{"(s) => s.stationIndex"}</Code>,
-    highlight: "只在跨站時閃",
-    log: "只在跨站時印出",
-  },
-  {
-    id: "progress",
-    component: "ProgressReadout",
-    read: <Code>getState() + rAF</Code>,
-    highlight: "完全不閃",
-    log: "只有一開始印一次",
-  },
-  {
-    id: "wrong",
-    component: "ProgressReadoutWrong",
-    read: <Code>{"(s) => s.progress"}</Code>,
-    highlight: "捲動時一直閃",
-    log: "捲動時一直刷",
-  },
-];
-
 const VERIFICATIONS: Verification[] = [
   {
     id: "strict-mode",
@@ -435,13 +361,82 @@ const VERIFICATIONS: Verification[] = [
   },
 ];
 
-export {
-  CONCEPTS,
-  PITFALLS,
-  READ_COLUMNS,
-  READ_ROWS,
-  RENDER_COLUMNS,
-  RENDER_ROWS,
-  STEPS,
-  VERIFICATIONS,
+const CONCLUSIONS: Verification[] = [
+  {
+    id: "read-by-frequency",
+    body: (
+      <>
+        同一個 store，
+        <strong>
+          高頻欄位用 <Code>getState()</Code> 讀
+        </strong>
+        ，低頻欄位用 selector 訂閱。用 selector 訂閱 progress
+        的元件，捲動時會每幀重新渲染。
+      </>
+    ),
+  },
+  {
+    id: "own-loop",
+    body: (
+      <>
+        Lenis 設 <Code>autoRaf: false</Code>，由自己的 rAF 迴圈驅動，並在{" "}
+        <Code>useEffect</Code> 的 cleanup 中依反序完整清理。 這條迴圈就是單元 03
+        的 fallback 迴圈。
+      </>
+    ),
+  },
+  {
+    id: "moved",
+    body: (
+      <>
+        store 已搬進正式專案的 <Code>src/stores/scroll.ts</Code>
+        。單元 05 起，stationIndex 由 <Code>src/data/timeline.ts</Code>{" "}
+        的權重換算出邊界後計算，畫面直接顯示站點 id。
+      </>
+    ),
+  },
+];
+
+const CONTENT: Unit02Content = {
+  intro: (
+    <>
+      捲動進度寫入 zustand store，高頻的 <Code>progress</Code> 與低頻的{" "}
+      <Code>stationIndex</Code> 用不同方式讀取。這一頁本身就是 Lenis
+      平滑捲動的示範，往下捲動就會更新 store。
+    </>
+  ),
+  demoCaption: "Smooth Scroll",
+  steps: STEPS,
+  conclusions: { title: "結論", items: CONCLUSIONS },
+  readTable: {
+    title: "zustand 的三種讀寫方式",
+    caption: "zustand 的讀寫方式與重新渲染",
+    columns: { syntax: "寫法", rerender: "重新渲染", usage: "用在哪裡" },
+    rows: {
+      selector: {
+        rerender: "只在選到的值改變時",
+        usage: "DOM 元件讀取低頻欄位",
+      },
+      "get-state": { rerender: "不會", usage: "useFrame、rAF 迴圈、事件回呼" },
+      set: {
+        rerender: "只影響有訂閱該欄位的元件",
+        usage: "Lenis 的 scroll 事件",
+      },
+    },
+  },
+  renderTable: {
+    title: "重新渲染比較",
+    caption: "三種讀取方式在捲動時的重新渲染",
+    columns: { component: "元件", read: "讀取方式" },
+    rows: {
+      station: { highlight: "只在跨站時閃", log: "只在跨站時印出" },
+      progress: { highlight: "完全不閃", log: "只有一開始印一次" },
+      wrong: { highlight: "捲動時一直閃", log: "捲動時一直刷" },
+    },
+  },
+  concepts: CONCEPTS,
+  pitfalls: PITFALLS,
+  verifications: VERIFICATIONS,
 };
+
+export default CONTENT;

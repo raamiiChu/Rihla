@@ -19,7 +19,7 @@ const STATIONS = DEMO_STATION_RANGES.map(
   }),
 ).filter(({ hasDwell }) => hasDwell);
 
-const StationNav = () => {
+const StationNav = ({ label }: { label: string }) => {
   const currentIndex = useScrollStore((state) =>
     getStationIndex(state.progress, DEMO_STATION_RANGES),
   );
@@ -32,7 +32,7 @@ const StationNav = () => {
   };
 
   return (
-    <nav aria-label="站點">
+    <nav aria-label={label}>
       <ButtonGroup>
         {STATIONS.map(({ id, index, destination }) => (
           <Button

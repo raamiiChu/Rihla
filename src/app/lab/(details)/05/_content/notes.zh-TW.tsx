@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import {
   Code,
   type Column,
@@ -8,6 +7,7 @@ import {
   type Verification,
 } from "@/app/lab/_components";
 import type { Flow } from "../_components/FlowDiagram";
+import type { CoordinateRow, Unit05Content } from "./types";
 
 const STEPS: Step[] = [
   {
@@ -146,62 +146,6 @@ const FRAME_FLOWS: Flow[] = [
   },
 ];
 
-type RangeRow = {
-  id: string;
-  station: ReactNode;
-  weights: string;
-  flightStart: string;
-  flightEnd: string;
-  dwellEnd: string;
-  rail: string;
-};
-
-const RANGE_COLUMNS: Column<RangeRow>[] = [
-  { key: "station", label: "站點" },
-  { key: "weights", label: "flight / dwell", numeric: true },
-  { key: "flightStart", label: "flightStart", numeric: true },
-  { key: "flightEnd", label: "flightEnd", numeric: true },
-  { key: "dwellEnd", label: "dwellEnd", numeric: true },
-  { key: "rail", label: "軌道位置 u", numeric: true },
-];
-
-const RANGE_ROWS: RangeRow[] = [
-  {
-    id: "tangier",
-    station: <Code>tangier</Code>,
-    weights: "0 / 10",
-    flightStart: "0",
-    flightEnd: "0",
-    dwellEnd: "0.3030",
-    rail: "0",
-  },
-  {
-    id: "mecca",
-    station: <Code>mecca</Code>,
-    weights: "3 / 5",
-    flightStart: "0.3030",
-    flightEnd: "0.3939",
-    dwellEnd: "0.5455",
-    rail: "0.3802",
-  },
-  {
-    id: "samarkand",
-    station: <Code>samarkand</Code>,
-    weights: "5 / 10",
-    flightStart: "0.5455",
-    flightEnd: "0.6970",
-    dwellEnd: "1",
-    rail: "1",
-  },
-];
-
-type CoordinateRow = {
-  id: string;
-  name: string;
-  meaning: string;
-  values: ReactNode;
-};
-
 const COORDINATE_COLUMNS: Column<CoordinateRow>[] = [
   { key: "name", label: "座標" },
   { key: "meaning", label: "意思" },
@@ -239,66 +183,6 @@ const COORDINATE_ROWS: CoordinateRow[] = [
         <Code>smoothstep</Code> 的回傳值，連接上面兩種座標
       </>
     ),
-  },
-];
-
-type QueryRow = {
-  id: string;
-  fn: ReactNode;
-  file: ReactNode;
-  answer: string;
-  when: string;
-};
-
-const QUERY_COLUMNS: Column<QueryRow>[] = [
-  { key: "fn", label: "函式" },
-  { key: "file", label: "檔案" },
-  { key: "answer", label: "回答的問題" },
-  { key: "when", label: "呼叫時機" },
-];
-
-const QUERY_ROWS: QueryRow[] = [
-  {
-    id: "ranges",
-    fn: <Code>buildStationRanges</Code>,
-    file: <Code>timeline/stations.ts</Code>,
-    answer: "權重換算成 0–1 的邊界",
-    when: "模組載入時一次",
-  },
-  {
-    id: "index",
-    fn: <Code>getStationIndex</Code>,
-    file: <Code>timeline/stations.ts</Code>,
-    answer: "progress 落在第幾站",
-    when: "每次寫入 progress",
-  },
-  {
-    id: "skip",
-    fn: <Code>getSkipDestination</Code>,
-    file: <Code>timeline/stations.ts</Code>,
-    answer: "SKIP 落在哪裡，沒有下一站時為 null",
-    when: "selector 與點擊",
-  },
-  {
-    id: "count",
-    fn: <Code>countDestinationsBetween</Code>,
-    file: <Code>timeline/stations.ts</Code>,
-    answer: "跳轉途中整段經過幾個停留段",
-    when: "點擊",
-  },
-  {
-    id: "rail-positions",
-    fn: <Code>getStationRailPositions</Code>,
-    file: <Code>camera/pacing.ts</Code>,
-    answer: "每站在軌道上的 u",
-    when: "建立軌道時一次",
-  },
-  {
-    id: "rail-progress",
-    fn: <Code>getRailProgress</Code>,
-    file: <Code>camera/pacing.ts</Code>,
-    answer: "progress 換成軌道 u",
-    when: "每幀",
   },
 ];
 
@@ -530,17 +414,84 @@ const VERIFICATIONS: Verification[] = [
   },
 ];
 
-export {
-  BUILD_FLOWS,
-  CONCEPTS,
-  COORDINATE_COLUMNS,
-  COORDINATE_ROWS,
-  FRAME_FLOWS,
-  PITFALLS,
-  QUERY_COLUMNS,
-  QUERY_ROWS,
-  RANGE_COLUMNS,
-  RANGE_ROWS,
-  STEPS,
-  VERIFICATIONS,
+const CONTENT: Unit05Content = {
+  intro: (
+    <>
+      時間軸只寫每站飛行與停留的相對權重，邊界由純函式換算。stationIndex、鏡頭的停留與
+      SKIP 的落點都從同一份資料查詢，改一個數字，其他都跟著變。
+    </>
+  ),
+  demoCaption: "捲動時鏡頭沿 3 站的迷你時間軸前進，在停留段減速。",
+  demo: {
+    navLabel: "站點",
+    readout: {
+      station: "當前站點",
+      phase: "階段",
+      progress: "progress",
+      rail: "軌道位置 u",
+      skip: "SKIP 目的地",
+      flight: "飛行",
+      dwell: "停留",
+    },
+  },
+  steps: STEPS,
+  dataFlow: {
+    title: "資料流",
+    intro: "會變的只有 progress。其他資料都在模組載入時算一次，每幀只做查詢。",
+    buildTitle: "建置時算一次",
+    frameTitle: "每次 progress 改變",
+    build: BUILD_FLOWS,
+    frame: FRAME_FLOWS,
+  },
+  timeline: {
+    title: "示範的時間軸",
+    intro: (
+      <>
+        <Code>_utils/timeline.ts</Code> 的權重總和為
+        33，邊界是累計權重除以總和。軌道位置來自站點所在的控制點（0、2、4），兩段飛行的長度不同，所以
+        mecca 不在 0.5。
+      </>
+    ),
+    caption: "示範時間軸的權重、換算出的邊界與軌道位置",
+    columns: { station: "站點", rail: "軌道位置 u" },
+  },
+  coordinates: {
+    title: "兩種座標",
+    intro: (
+      <>
+        <Code>getRailProgress</Code>{" "}
+        把捲動換成軌道上的位置：用捲動算出比例，再用比例在軌道上移動。smoothstep
+        的參數全部是捲動座標，lerp 的兩端全部是軌道座標。
+      </>
+    ),
+    caption: "progress、軌道 u 與比例",
+    columns: COORDINATE_COLUMNS,
+    rows: COORDINATE_ROWS,
+  },
+  queries: {
+    title: "查詢函式",
+    caption: "時間軸與鏡頭節奏的純函式",
+    columns: {
+      fn: "函式",
+      file: "檔案",
+      answer: "回答的問題",
+      when: "呼叫時機",
+    },
+    rows: {
+      ranges: { answer: "權重換算成 0–1 的邊界", when: "模組載入時一次" },
+      index: { answer: "progress 落在第幾站", when: "每次寫入 progress" },
+      skip: {
+        answer: "SKIP 落在哪裡，沒有下一站時為 null",
+        when: "selector 與點擊",
+      },
+      count: { answer: "跳轉途中整段經過幾個停留段", when: "點擊" },
+      "rail-positions": { answer: "每站在軌道上的 u", when: "建立軌道時一次" },
+      "rail-progress": { answer: "progress 換成軌道 u", when: "每幀" },
+    },
+  },
+  concepts: CONCEPTS,
+  pitfalls: PITFALLS,
+  verifications: VERIFICATIONS,
 };
+
+export default CONTENT;

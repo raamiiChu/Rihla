@@ -4,18 +4,21 @@ import { Code } from "@/app/lab/_components";
 
 type Driver = "fallback" | "r3f" | "none";
 
+type StageId = "initial" | "created" | "lost" | "restored" | "unmount";
+
+/** The wording of the timeline; the stages themselves are the same in every locale. */
+type DriverTimelineLabels = {
+  drivers: Record<Driver, string>;
+  notes: Record<StageId, string>;
+  /** The trigger of the last stage, which is an event rather than code. */
+  unmount: string;
+};
+
 type Stage = {
-  id: string;
+  id: StageId;
   /** The event that moves the driver into this stage; absent for the first stage. */
   trigger?: ReactNode;
   driver: Driver;
-  note: string;
-};
-
-const DRIVER_LABEL: Record<Driver, string> = {
-  fallback: "fallback 驅動",
-  r3f: "R3F 驅動",
-  none: "全部停止",
 };
 
 const DRIVER_STYLE: Record<Driver, string> = {
@@ -24,33 +27,22 @@ const DRIVER_STYLE: Record<Driver, string> = {
   none: "border-border text-muted-foreground",
 };
 
-const STAGES: Stage[] = [
-  { id: "initial", driver: "fallback", note: "Canvas 掛載前" },
-  {
-    id: "created",
-    trigger: <Code>onCreated</Code>,
-    driver: "r3f",
-    note: "Canvas 就緒",
-  },
-  {
-    id: "lost",
-    trigger: <Code>webglcontextlost</Code>,
-    driver: "fallback",
-    note: "畫面停住，仍可捲動",
-  },
+const getStages = (labels: DriverTimelineLabels): Stage[] => [
+  { id: "initial", driver: "fallback" },
+  { id: "created", trigger: <Code>onCreated</Code>, driver: "r3f" },
+  { id: "lost", trigger: <Code>webglcontextlost</Code>, driver: "fallback" },
   {
     id: "restored",
     trigger: <Code>webglcontextrestored</Code>,
     driver: "r3f",
-    note: "恢復渲染",
   },
-  { id: "unmount", trigger: "卸載", driver: "none", note: "任何階段皆可能" },
+  { id: "unmount", trigger: labels.unmount, driver: "none" },
 ];
 
 /** How the Lenis driver changes over the page's lifetime. */
-const DriverTimeline = () => (
+const DriverTimeline = ({ labels }: { labels: DriverTimelineLabels }) => (
   <ol className="space-y-2">
-    {STAGES.map((stage) => (
+    {getStages(labels).map((stage) => (
       <li key={stage.id} className="space-y-2">
         {stage.trigger && (
           <p className="flex items-center gap-2 ps-4 text-sm text-muted-foreground">
@@ -61,12 +53,15 @@ const DriverTimeline = () => (
         <div
           className={`flex items-baseline justify-between gap-4 rounded-lg border px-4 py-2 ${DRIVER_STYLE[stage.driver]}`}
         >
-          <span>{DRIVER_LABEL[stage.driver]}</span>
-          <span className="text-sm text-muted-foreground">{stage.note}</span>
+          <span>{labels.drivers[stage.driver]}</span>
+          <span className="text-sm text-muted-foreground">
+            {labels.notes[stage.id]}
+          </span>
         </div>
       </li>
     ))}
   </ol>
 );
 
+export type { DriverTimelineLabels };
 export default DriverTimeline;

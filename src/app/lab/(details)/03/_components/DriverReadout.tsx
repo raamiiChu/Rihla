@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import type { DriverReadoutLabels } from "../_content/types";
 import { getStats } from "../_utils/scrollDriver";
 
-const DriverReadout = () => {
+/** Labels come in as props, so the notes in both locales stay out of the client bundle. */
+const DriverReadout = ({ labels }: { labels: DriverReadoutLabels }) => {
   const driverRef = useRef<HTMLElement>(null);
   const fallbackCountRef = useRef<HTMLElement>(null);
   const r3fCountRef = useRef<HTMLElement>(null);
@@ -48,7 +50,7 @@ const DriverReadout = () => {
   return (
     <dl className="grid grid-cols-2 gap-x-6 gap-y-3 rounded-lg border border-border bg-background/70 px-4 py-3 backdrop-blur-sm sm:grid-cols-4">
       <div className="space-y-1">
-        <dt className="text-xs text-muted-foreground">驅動來源</dt>
+        <dt className="text-xs text-muted-foreground">{labels.driver}</dt>
         <dd
           ref={driverRef}
           className="text-muted-foreground data-[driver=fallback]:text-foreground data-[driver=r3f]:text-primary"
@@ -57,19 +59,19 @@ const DriverReadout = () => {
         </dd>
       </div>
       <div className="space-y-1">
-        <dt className="text-xs text-muted-foreground">fallback 呼叫</dt>
+        <dt className="text-xs text-muted-foreground">{labels.fallback}</dt>
         <dd ref={fallbackCountRef} className="tabular-nums">
           0
         </dd>
       </div>
       <div className="space-y-1">
-        <dt className="text-xs text-muted-foreground">R3F 呼叫</dt>
+        <dt className="text-xs text-muted-foreground">{labels.r3f}</dt>
         <dd ref={r3fCountRef} className="tabular-nums">
           0
         </dd>
       </div>
       <div className="space-y-1">
-        <dt className="text-xs text-muted-foreground">同幀重複呼叫</dt>
+        <dt className="text-xs text-muted-foreground">{labels.duplicates}</dt>
         <dd
           ref={duplicatesRef}
           className="tabular-nums data-[alert=true]:text-destructive"

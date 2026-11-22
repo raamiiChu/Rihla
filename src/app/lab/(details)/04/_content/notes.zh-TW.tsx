@@ -1,12 +1,11 @@
-import type { ReactNode } from "react";
 import {
   Code,
-  type Column,
   type Concept,
   type Pitfall,
   type Step,
   type Verification,
 } from "@/app/lab/_components";
+import type { Unit04Content } from "./types";
 
 const STEPS: Step[] = [
   {
@@ -59,277 +58,6 @@ const STEPS: Step[] = [
       </>
     ),
     done: true,
-  },
-];
-
-type SegmentRow = {
-  id: string;
-  segment: string;
-  length: string;
-};
-
-const SEGMENT_COLUMNS: Column<SegmentRow>[] = [
-  { key: "segment", label: "段" },
-  { key: "length", label: "控制點距離", numeric: true },
-];
-
-const SEGMENT_ROWS: SegmentRow[] = [
-  { id: "0-1", segment: "0 → 1", length: "6.2" },
-  { id: "1-2", segment: "1 → 2", length: "11.5" },
-  { id: "2-3", segment: "2 → 3", length: "13.2" },
-  { id: "3-4", segment: "3 → 4", length: "4.9" },
-  { id: "4-5", segment: "4 → 5", length: "13.5" },
-  { id: "5-6", segment: "5 → 6", length: "3.3" },
-  { id: "6-7", segment: "6 → 7", length: "15.4" },
-];
-
-type LineRow = {
-  id: string;
-  approach: ReactNode;
-  underlying: ReactNode;
-  width: string;
-  disposal: string;
-  usedFor: string;
-};
-
-const LINE_COLUMNS: Column<LineRow>[] = [
-  { key: "approach", label: "寫法" },
-  { key: "underlying", label: "底層類別" },
-  { key: "width", label: "線寬" },
-  { key: "disposal", label: "釋放資源" },
-  { key: "usedFor", label: "本專案用在" },
-];
-
-const LINE_ROWS: LineRow[] = [
-  {
-    id: "three-line",
-    approach: <Code>&lt;threeLine&gt;</Code>,
-    underlying: <Code>THREE.Line</Code>,
-    width: "固定 1px",
-    disposal: "R3F 自動",
-    usedFor: "除錯線（本單元）",
-  },
-  {
-    id: "drei-line",
-    approach: (
-      <>
-        drei <Code>&lt;Line&gt;</Code>
-      </>
-    ),
-    underlying: (
-      <>
-        <Code>Line2</Code>（three-stdlib）
-      </>
-    ),
-    width: "可調",
-    disposal: "drei 自動",
-    usedFor: "不使用",
-  },
-  {
-    id: "line2",
-    approach: (
-      <>
-        自建 <Code>Line2</Code> + <Code>&lt;primitive&gt;</Code>
-      </>
-    ),
-    underlying: (
-      <>
-        <Code>Line2</Code>（three）
-      </>
-    ),
-    width: "可調",
-    disposal: "自己負責",
-    usedFor: "旅程線（單元 09 起）",
-  },
-];
-
-type RotationRow = {
-  id: string;
-  representation: ReactNode;
-  size: number;
-  tradeoff: ReactNode;
-  usedFor: ReactNode;
-};
-
-const ROTATION_COLUMNS: Column<RotationRow>[] = [
-  { key: "representation", label: "表示法" },
-  { key: "size", label: "數量", numeric: true },
-  { key: "tradeoff", label: "優缺點" },
-  { key: "usedFor", label: "本單元用在" },
-];
-
-const Tradeoff = ({ pro, con }: { pro: string; con: string }) => (
-  <>
-    <span className="block">優：{pro}</span>
-    <span className="block">缺：{con}</span>
-  </>
-);
-
-const ROTATION_ROWS: RotationRow[] = [
-  {
-    id: "euler",
-    representation: (
-      <>
-        Euler 角（<Code>rotation</Code>）
-      </>
-    ),
-    size: 3,
-    tradeoff: (
-      <Tradeoff pro="直觀，適合手動擺放" con="萬向節死鎖，插值路徑不自然" />
-    ),
-    usedFor: "不使用",
-  },
-  {
-    id: "matrix",
-    representation: (
-      <>
-        旋轉矩陣（<Code>Matrix4</Code> 的 3×3 部分）
-      </>
-    ),
-    size: 9,
-    tradeoff: <Tradeoff pro="三欄就是三根座標軸" con="數字多，不方便插值" />,
-    usedFor: (
-      <>
-        <Code>lookAt</Code> 的中間產物
-      </>
-    ),
-  },
-  {
-    id: "quaternion",
-    representation: (
-      <>
-        Quaternion（<Code>quaternion</Code>）
-      </>
-    ),
-    size: 4,
-    tradeoff: <Tradeoff pro="沒有死鎖，可用 slerp 插值" con="數字看不出朝向" />,
-    usedFor: (
-      <>
-        <Code>CameraState</Code> 儲存朝向、<Code>copy</Code> 進鏡頭
-      </>
-    ),
-  },
-];
-
-type LayoutRow = {
-  id: string;
-  field: string;
-  offset: number;
-  size: number;
-  purpose: string;
-};
-
-const LAYOUT_COLUMNS: Column<LayoutRow>[] = [
-  { key: "field", label: "欄位" },
-  { key: "offset", label: "偏移", numeric: true },
-  { key: "size", label: "float 數", numeric: true },
-  { key: "purpose", label: "用途" },
-];
-
-const LAYOUT_ROWS: LayoutRow[] = [
-  {
-    id: "position",
-    field: "position",
-    offset: 0,
-    size: 3,
-    purpose: "鏡頭位置",
-  },
-  {
-    id: "tangent",
-    field: "tangent",
-    offset: 3,
-    size: 3,
-    purpose: "前進方向（單位向量）",
-  },
-  {
-    id: "up",
-    field: "up",
-    offset: 6,
-    size: 3,
-    purpose: "鏡頭的上方，與 tangent 垂直",
-  },
-];
-
-type GateRow = {
-  id: string;
-  factor: string;
-  question: string;
-  formula: ReactNode;
-  full: string;
-  none: string;
-};
-
-const GATE_COLUMNS: Column<GateRow>[] = [
-  { key: "factor", label: "比例" },
-  { key: "question", label: "回答的問題" },
-  { key: "formula", label: "算式" },
-  { key: "full", label: "全力回正" },
-  { key: "none", label: "不回正" },
-];
-
-const GATE_ROWS: GateRow[] = [
-  {
-    id: "distance",
-    factor: "距離",
-    question: "這一步走了多遠？",
-    formula: <Code>1 − e^(−rate × 步長)</Code>,
-    full: "—",
-    none: "rate 為 0",
-  },
-  {
-    id: "vertical",
-    factor: "垂直門檻",
-    question: "軌道有多陡？",
-    formula: <Code>1 − smoothstep(|tangent · WORLD_UP|, 0.5, 0.8)</Code>,
-    full: "坡度 30° 以下",
-    none: "坡度 53° 以上",
-  },
-  {
-    id: "upright",
-    factor: "正立門檻",
-    question: "鏡頭有多正立？",
-    formula: <Code>smoothstep(up · target, 0, 0.5)</Code>,
-    full: "傾斜 60° 以下",
-    none: "傾斜 90° 以上",
-  },
-];
-
-type LevellingResultRow = {
-  id: string;
-  version: string;
-  exitTilt: string;
-  sampleDifference: string;
-  top: string;
-};
-
-const LEVELLING_RESULT_COLUMNS: Column<LevellingResultRow>[] = [
-  { key: "version", label: "版本（rate 0.1）" },
-  { key: "exitTilt", label: "出口傾斜", numeric: true },
-  { key: "sampleDifference", label: "1024 vs 256", numeric: true },
-  { key: "top", label: "迴圈頂點" },
-];
-
-const LEVELLING_RESULT_ROWS: LevellingResultRow[] = [
-  {
-    id: "none",
-    version: "不回正（純 parallel transport）",
-    exitTilt: "41.1°",
-    sampleDifference: "0.014°",
-    top: "頭朝下",
-  },
-  {
-    id: "vertical-only",
-    version: "只有垂直門檻",
-    exitTilt: "16.5°",
-    sampleDifference: "153°",
-    top: "頭朝下，出迴圈後又翻成頭朝下",
-  },
-  {
-    id: "both",
-    version: "垂直門檻 + 正立門檻",
-    exitTilt: "0.27°",
-    sampleDifference: "0.008°",
-    top: "頭朝下",
   },
 ];
 
@@ -1261,23 +989,327 @@ const VERIFICATIONS: Verification[] = [
   },
 ];
 
-export {
-  CONCEPTS,
-  GATE_COLUMNS,
-  GATE_ROWS,
-  LAYOUT_COLUMNS,
-  LAYOUT_ROWS,
-  LEVELLING,
-  LEVELLING_RESULT_COLUMNS,
-  LEVELLING_RESULT_ROWS,
-  LINE_COLUMNS,
-  LINE_ROWS,
-  MATH,
-  PITFALLS,
-  ROTATION_COLUMNS,
-  ROTATION_ROWS,
-  SEGMENT_COLUMNS,
-  SEGMENT_ROWS,
-  STEPS,
-  VERIFICATIONS,
+const CONTENT: Unit04Content = {
+  intro: (
+    <>
+      鏡頭沿曲線前進，並把「progress →
+      鏡頭狀態」寫成純函式。曲線事先算成查找表，up 向量以 parallel transport
+      沿軌道傳遞，經過垂直段也不會翻轉；水平路段再逐步回正，消除殘留的傾斜。
+    </>
+  ),
+  demoCaption:
+    "捲動時鏡頭沿含垂直迴圈的 Catmull-Rom 曲線前進，可切換成俯瞰視角。",
+  steps: STEPS,
+  sections: {
+    controlPoints: {
+      title: "控制點的設計",
+      before: [
+        {
+          id: "two-curves",
+          body: (
+            <>
+              <Code>curve.ts</Code>{" "}
+              有兩條曲線，各自用來觀察不同的問題。示範欄右上角的按鈕在兩者之間切換，預設是{" "}
+              <Code>LOOP_CURVE</Code>。
+            </>
+          ),
+        },
+        {
+          id: "wave",
+          body: (
+            <>
+              <Code>WAVE_CURVE</Code>（8 個控制點，全長約 68）：z 從 0 延伸到
+              -60，y 在 -4 到 5 之間上下交錯。相鄰控制點的距離刻意不平均（最短
+              3.3、最長 15.4，差將近 5 倍），步驟 3 比較 <Code>getPoint</Code>{" "}
+              與 <Code>getPointAt</Code> 時速度差異才明顯。
+            </>
+          ),
+        },
+      ],
+      after: (
+        <>
+          <Code>LOOP_CURVE</Code>（6 個控制點，全長約
+          173）：像雲霄飛車的垂直迴圈，沿 -z 前進、爬升，在頂點倒著往 +z
+          走，從靠近入口的一側落下，再從迴圈下方繼續往前。前進方向兩度接近垂直，用來觀察固定
+          up 的翻轉、parallel transport 與 levelling。x
+          從入口到出口偏移，讓出口錯開入口；也因此迴圈不在同一個平面上，tangent
+          從未真正垂直，純 parallel transport 出迴圈後會殘留約 41° 的傾斜。
+        </>
+      ),
+    },
+    lines: { title: "三種畫線方式" },
+    layout: {
+      title: "查找表的資料排列",
+      intro: (
+        <>
+          每個取樣點 9 個 float（<Code>STRIDE = 9</Code>），第 <Code>i</Code>{" "}
+          個取樣點從 <Code>i * STRIDE</Code> 開始。
+        </>
+      ),
+    },
+    sampling: {
+      title: "弧長等分與參數等分",
+      paragraphs: [
+        {
+          id: "two-sets",
+          body: (
+            <>
+              以下以 <Code>WAVE_CURVE</Code> 為例，觀察時先用按鈕切到 Wave。
+              <Code>LutPoints</Code> 以 64 個取樣點同時畫出兩組點：綠點來自{" "}
+              <Code>buildRailLUT</Code>（弧長等分），紅點來自{" "}
+              <Code>curve.getPoints(63)</Code>
+              （參數等分）。綠點沿整條軌道等距；紅點在 5 → 6
+              段（3.3）擠在一起，在 6 → 7 段（15.4）很稀疏。
+            </>
+          ),
+        },
+        {
+          id: "time",
+          body: (
+            <>
+              取樣數改成 8 時，紅點剛好落在 8
+              個控制點上，綠點只有頭尾兩點重合。把 <Code>t</Code>{" "}
+              想成時間就很清楚：用 <Code>getPoint</Code>{" "}
+              驅動鏡頭，每一段都分到相同的時間，6 → 7 段要用同樣的時間走將近 5
+              倍的距離，速度也就快將近 5 倍。這是鏡頭必須用{" "}
+              <Code>getPointAt</Code> 的理由。
+            </>
+          ),
+        },
+      ],
+    },
+    rotation: {
+      title: "旋轉的三種表示法",
+      paragraphs: [
+        {
+          id: "euler",
+          body: (
+            <>
+              Euler 角把旋轉拆成依序繞三根軸的三次轉動（three 預設順序是{" "}
+              <Code>XYZ</Code>
+              ），像三層互相套住的環。中間那次轉到 90°
+              時，第一根軸和第三根軸會重疊，兩個角度轉的是同一個方向，少了一個自由度，這就是萬向節死鎖（gimbal
+              lock）。例如鏡頭仰頭看正上方時，「左右轉」和「歪頭」變成同一個動作，有些朝向的微小變化要靠角度大幅跳動才表示得出來。
+            </>
+          ),
+        },
+        {
+          id: "quaternion",
+          body: (
+            <>
+              Quaternion
+              把旋轉寫成「繞某一根軸轉某個角度」的單一動作，不是依序的三次轉動，所以沒有死鎖。three
+              的 <Code>Object3D</Code> 同時有 <Code>rotation</Code> 與{" "}
+              <Code>quaternion</Code>，兩者自動同步，改其中一個另一個會跟著變。
+            </>
+          ),
+        },
+        {
+          id: "flip",
+          body: (
+            <>
+              注意：用 quaternion 不代表鏡頭不會翻轉。固定 up 造成的翻轉發生在{" "}
+              <Code>lookAt</Code> 用外積求「右方」的那一步：前進方向與 up
+              平行時參考方向失效，跟最後用哪一種表示法儲存無關，要靠 parallel
+              transport 解決。
+            </>
+          ),
+        },
+      ],
+    },
+    levelling: {
+      title: "Levelling：水平路段回正",
+      intro: (
+        <>
+          Parallel transport 只保證連續，不保證朝上。<Code>LOOP_CURVE</Code>{" "}
+          繞完一圈回到水平路段時，地平線歪了約 41°。Levelling 在建表的每一步，把
+          up 往「與 tangent
+          垂直、又最朝上的方向」拉近一點，拉多少由三個比例相乘決定。
+        </>
+      ),
+      between: (
+        <>
+          以臨時實作校準：只看軌道坡度不夠，迴圈頂點的 tangent
+          是水平的，頭朝下的鏡頭也會被拉向世界 up。
+        </>
+      ),
+    },
+  },
+  tables: {
+    segment: {
+      caption: "WAVE_CURVE 相鄰控制點之間的距離",
+      columns: { segment: "段", length: "控制點距離" },
+    },
+    line: {
+      caption: "threeLine、drei Line 與自建 Line2 的比較",
+      columns: {
+        approach: "寫法",
+        underlying: "底層類別",
+        width: "線寬",
+        disposal: "釋放資源",
+        usedFor: "本專案用在",
+      },
+      rows: {
+        "three-line": {
+          approach: <Code>&lt;threeLine&gt;</Code>,
+          underlying: <Code>THREE.Line</Code>,
+          width: "固定 1px",
+          disposal: "R3F 自動",
+          usedFor: "除錯線（本單元）",
+        },
+        "drei-line": {
+          approach: (
+            <>
+              drei <Code>&lt;Line&gt;</Code>
+            </>
+          ),
+          underlying: (
+            <>
+              <Code>Line2</Code>（three-stdlib）
+            </>
+          ),
+          width: "可調",
+          disposal: "drei 自動",
+          usedFor: "不使用",
+        },
+        line2: {
+          approach: (
+            <>
+              自建 <Code>Line2</Code> + <Code>&lt;primitive&gt;</Code>
+            </>
+          ),
+          underlying: (
+            <>
+              <Code>Line2</Code>（three）
+            </>
+          ),
+          width: "可調",
+          disposal: "自己負責",
+          usedFor: "旅程線（單元 09 起）",
+        },
+      },
+    },
+    layout: {
+      caption: "查找表每個取樣點的欄位、偏移與用途",
+      columns: {
+        field: "欄位",
+        offset: "偏移",
+        size: "float 數",
+        purpose: "用途",
+      },
+      purpose: {
+        position: "鏡頭位置",
+        tangent: "前進方向（單位向量）",
+        up: "鏡頭的上方，與 tangent 垂直",
+      },
+    },
+    rotation: {
+      caption: "Euler 角、旋轉矩陣與 quaternion 的比較",
+      columns: {
+        representation: "表示法",
+        size: "數量",
+        tradeoff: "優缺點",
+        usedFor: "本單元用在",
+      },
+      pro: "優：",
+      con: "缺：",
+      rows: {
+        euler: {
+          representation: (
+            <>
+              Euler 角（<Code>rotation</Code>）
+            </>
+          ),
+          pro: "直觀，適合手動擺放",
+          con: "萬向節死鎖，插值路徑不自然",
+          usedFor: "不使用",
+        },
+        matrix: {
+          representation: (
+            <>
+              旋轉矩陣（<Code>Matrix4</Code> 的 3×3 部分）
+            </>
+          ),
+          pro: "三欄就是三根座標軸",
+          con: "數字多，不方便插值",
+          usedFor: (
+            <>
+              <Code>lookAt</Code> 的中間產物
+            </>
+          ),
+        },
+        quaternion: {
+          representation: (
+            <>
+              Quaternion（<Code>quaternion</Code>）
+            </>
+          ),
+          pro: "沒有死鎖，可用 slerp 插值",
+          con: "數字看不出朝向",
+          usedFor: (
+            <>
+              <Code>CameraState</Code> 儲存朝向、<Code>copy</Code> 進鏡頭
+            </>
+          ),
+        },
+      },
+    },
+    gate: {
+      caption: "決定每一步回正多少的三個比例",
+      columns: {
+        factor: "比例",
+        question: "回答的問題",
+        formula: "算式",
+        full: "全力回正",
+        none: "不回正",
+      },
+      rows: {
+        distance: {
+          factor: "距離",
+          question: "這一步走了多遠？",
+          formula: <Code>1 − e^(−rate × 步長)</Code>,
+          full: "—",
+          none: "rate 為 0",
+        },
+        vertical: {
+          factor: "垂直門檻",
+          question: "軌道有多陡？",
+          formula: <Code>1 − smoothstep(|tangent · WORLD_UP|, 0.5, 0.8)</Code>,
+          full: "坡度 30° 以下",
+          none: "坡度 53° 以上",
+        },
+        upright: {
+          factor: "正立門檻",
+          question: "鏡頭有多正立？",
+          formula: <Code>smoothstep(up · target, 0, 0.5)</Code>,
+          full: "傾斜 60° 以下",
+          none: "傾斜 90° 以上",
+        },
+      },
+    },
+    levelling: {
+      caption: "LOOP_CURVE 上三種版本的比較",
+      columns: {
+        version: "版本（rate 0.1）",
+        exitTilt: "出口傾斜",
+        sampleDifference: "1024 vs 256",
+        top: "迴圈頂點",
+      },
+      rows: {
+        none: { version: "不回正（純 parallel transport）", top: "頭朝下" },
+        "vertical-only": {
+          version: "只有垂直門檻",
+          top: "頭朝下，出迴圈後又翻成頭朝下",
+        },
+        both: { version: "垂直門檻 + 正立門檻", top: "頭朝下" },
+      },
+    },
+  },
+  math: { title: "數學重點", items: MATH },
+  concepts: CONCEPTS,
+  levelling: { title: "Levelling 重點", items: LEVELLING },
+  pitfalls: PITFALLS,
+  verifications: VERIFICATIONS,
 };
+
+export default CONTENT;

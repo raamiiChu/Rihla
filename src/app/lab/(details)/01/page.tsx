@@ -1,17 +1,14 @@
-import { Ar, DemoPane, NotesPane } from "@/app/lab/_components";
+import { DemoPane, NotesPane } from "@/app/lab/_components";
 import { GlyphDiagram, Notes } from "./_components";
+import { useUnit01Content } from "./_content";
 
 const Lab01Page = () => {
+  const content = useUnit01Content();
+
   return (
     <>
-      <DemoPane
-        caption={
-          <>
-            以 Amiri 排出的 <Ar>دهلي</Ar>，標出字型度量值與每個字形的 xAdvance。
-          </>
-        }
-      >
-        <GlyphDiagram />
+      <DemoPane caption={content.demoCaption}>
+        <GlyphDiagram title={content.diagramTitle} />
       </DemoPane>
       <NotesPane>
         <Notes />
