@@ -1,5 +1,4 @@
-import { useLocale } from "next-intl";
-import type { Localised } from "@/app/lab/_i18n";
+import { type Localised, useLabLocale } from "@/app/lab/_i18n";
 import enGB from "./notes.en-GB";
 import zhTW from "./notes.zh-TW";
 import type { Unit00Content } from "./types";
@@ -10,6 +9,6 @@ const CONTENT: Localised<Unit00Content> = {
 };
 
 /** Unit 00's notes in the current locale. */
-const useUnit00Content = () => CONTENT[useLocale()];
+const useUnit00Content = () => CONTENT[useLabLocale()];
 
 export { useUnit00Content };

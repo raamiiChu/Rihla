@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { useLocale } from "next-intl";
 import { LocaleSwitcher } from "@/components";
-import { useLabUi } from "./_i18n";
+import { useLabLocale, useLabUi } from "./_i18n";
 import { PHASES, type Phase, UNITS, type Unit, type UnitStatus } from "./const";
 
 const STATUS_STYLE: Record<UnitStatus, string> = {
@@ -13,7 +12,7 @@ const STATUS_STYLE: Record<UnitStatus, string> = {
 const UnitRow = ({ unit }: { unit: Unit }) => {
   // Script units have no demo page, but they still get a notes page.
   const isOpenable = unit.status !== "todo";
-  const locale = useLocale();
+  const locale = useLabLocale();
   const ui = useLabUi();
 
   const content = (
@@ -59,7 +58,7 @@ const UnitRow = ({ unit }: { unit: Unit }) => {
 const LabPage = () => {
   const phases = Object.keys(PHASES).map(Number) as Phase[];
   const doneCount = UNITS.filter((unit) => unit.status === "done").length;
-  const locale = useLocale();
+  const locale = useLabLocale();
   const ui = useLabUi();
 
   return (

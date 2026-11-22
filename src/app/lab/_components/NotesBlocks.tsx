@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { useLocale } from "next-intl";
 import type { PropsWithChildren, ReactNode } from "react";
 import { LocaleSwitcher } from "@/components";
-import { useLabUi } from "../_i18n";
+import { useLabLocale, useLabUi } from "../_i18n";
 import { UNITS } from "../const";
 
 type NotesHeaderProps = PropsWithChildren<{
@@ -13,7 +12,7 @@ type NotesHeaderProps = PropsWithChildren<{
 /** Back link, unit number and title. `children` is the introduction. */
 const NotesHeader = ({ unitId, children }: NotesHeaderProps) => {
   const unit = UNITS.find(({ id }) => id === unitId);
-  const locale = useLocale();
+  const locale = useLabLocale();
   const ui = useLabUi();
 
   if (!unit) {

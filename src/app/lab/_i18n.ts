@@ -1,13 +1,32 @@
 import { useLocale } from "next-intl";
-import type { Locale } from "@/i18n/config";
 import type { UnitStatus } from "./const";
+
+/**
+ * The lab supports its own set of locales, independent of the site's: if the
+ * site adds Arabic, the lab keeps these two and falls back to English.
+ */
+const LAB_LOCALES = ["zh-TW", "en-GB"] as const;
+type LabLocale = (typeof LAB_LOCALES)[number];
+const LAB_FALLBACK_LOCALE: LabLocale = "en-GB";
+
+const isLabLocale = (value: string): value is LabLocale =>
+  (LAB_LOCALES as readonly string[]).includes(value);
+
+/**
+ * The current locale, narrowed to one the lab supports. Lab code calls this
+ * instead of next-intl's `useLocale()`. Works in Server and Client Components.
+ */
+const useLabLocale = (): LabLocale => {
+  const locale = useLocale();
+  return isLabLocale(locale) ? locale : LAB_FALLBACK_LOCALE;
+};
 
 /**
  * Lab copy lives here and in each unit's `_content/`, not in
  * `messages/*.json`: the root layout sends all messages to the browser, and
  * lab notes are full of code snippets whose braces clash with ICU syntax.
  */
-type Localised<T> = Record<Locale, T>;
+type Localised<T> = Record<LabLocale, T>;
 
 type LabUi = {
   backLink: string;
@@ -82,7 +101,7 @@ const LAB_UI: Localised<LabUi> = {
 };
 
 /** Works in Server Components and Client Components alike. */
-const useLabUi = () => LAB_UI[useLocale()];
+const useLabUi = () => LAB_UI[useLabLocale()];
 
-export type { Localised };
-export { useLabUi };
+export type { LabLocale, Localised };
+export { useLabLocale, useLabUi };
