@@ -1,11 +1,8 @@
 import Link from "next/link";
+import { useLocale } from "next-intl";
+import { LocaleSwitcher } from "@/components";
+import { useLabUi } from "./_i18n";
 import { PHASES, type Phase, UNITS, type Unit, type UnitStatus } from "./const";
-
-const STATUS_LABEL: Record<UnitStatus, string> = {
-  done: "完成",
-  "in-progress": "進行中",
-  todo: "未開始",
-};
 
 const STATUS_STYLE: Record<UnitStatus, string> = {
   done: "border-gold/40 text-gold",
@@ -16,20 +13,24 @@ const STATUS_STYLE: Record<UnitStatus, string> = {
 const UnitRow = ({ unit }: { unit: Unit }) => {
   // Script units have no demo page, but they still get a notes page.
   const isOpenable = unit.status !== "todo";
+  const locale = useLocale();
+  const ui = useLabUi();
 
   const content = (
     <>
       <span className="text-sm text-muted-foreground tabular-nums">
         {unit.id}
       </span>
-      <span className="min-w-0 flex-1 truncate">{unit.title}</span>
+      <span className="min-w-0 flex-1">{unit.title[locale]}</span>
       {unit.kind === "script" && (
-        <span className="text-xs text-muted-foreground">腳本</span>
+        <span className="shrink-0 text-xs text-muted-foreground">
+          {ui.index.script}
+        </span>
       )}
       <span
-        className={`rounded-full border px-2 py-0.5 text-xs ${STATUS_STYLE[unit.status]}`}
+        className={`shrink-0 rounded-full border px-2 py-0.5 text-xs ${STATUS_STYLE[unit.status]}`}
       >
-        {STATUS_LABEL[unit.status]}
+        {ui.index.status[unit.status]}
       </span>
     </>
   );
@@ -58,19 +59,24 @@ const UnitRow = ({ unit }: { unit: Unit }) => {
 const LabPage = () => {
   const phases = Object.keys(PHASES).map(Number) as Phase[];
   const doneCount = UNITS.filter((unit) => unit.status === "done").length;
+  const locale = useLocale();
+  const ui = useLabUi();
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
       <header className="mb-12">
-        <p className="text-xs tracking-[0.3em] text-gold/80 uppercase">
-          Rihla · Lab
-        </p>
-        <h1 className="mt-3 text-3xl text-parchment">練習場</h1>
+        <div className="flex items-center justify-between gap-4">
+          <p className="text-xs tracking-[0.3em] text-gold/80 uppercase">
+            Rihla · Lab
+          </p>
+          <LocaleSwitcher />
+        </div>
+        <h1 className="mt-3 text-3xl text-parchment">{ui.index.title}</h1>
         <p className="mt-3 text-sm leading-relaxed text-parchment/90">
-          每個單元先在這裡用最小範例練熟，再搬進正式專案。
+          {ui.index.intro}
         </p>
         <p className="mt-6 text-sm text-muted-foreground tabular-nums">
-          已完成 {doneCount} / {UNITS.length}
+          {ui.index.progress(doneCount, UNITS.length)}
         </p>
         {/* Decorative: the text above already states the progress. */}
         <div className="mt-2 h-px w-full bg-parchment/10" aria-hidden="true">
@@ -85,7 +91,7 @@ const LabPage = () => {
         {phases.map((phase) => (
           <section key={phase}>
             <h2 className="mb-3 text-xs tracking-widest text-muted-foreground">
-              第 {phase} 階段：{PHASES[phase]}
+              {ui.index.phase(phase, PHASES[phase][locale])}
             </h2>
             <ul className="space-y-2">
               {UNITS.filter((unit) => unit.phase === phase).map((unit) => (
