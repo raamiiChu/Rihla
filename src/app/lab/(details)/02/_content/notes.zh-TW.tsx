@@ -176,6 +176,17 @@ const CONCEPTS: Concept[] = [
     ),
   },
   {
+    title: "store 活得比頁面久：cleanup 要重設",
+    body: (
+      <>
+        store 是模組層級的單例，切到其他單元時不會重設，所以 cleanup 在{" "}
+        <Code>unsubscribe()</Code> 之後呼叫{" "}
+        <Code>useScrollStore.setState(useScrollStore.getInitialState())</Code>
+        。原因見單元 06 的 <Code>isSynced</Code>。
+      </>
+    ),
+  },
+  {
     title: "Lenis 預設遵循減少動態效果",
     body: (
       <>

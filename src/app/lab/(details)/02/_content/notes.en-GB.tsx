@@ -189,6 +189,17 @@ const CONCEPTS: Concept[] = [
     ),
   },
   {
+    title: "The store outlives the page: reset it in the cleanup",
+    body: (
+      <>
+        The store is a module-level singleton that survives a move to another
+        unit, so after <Code>unsubscribe()</Code> the cleanup calls{" "}
+        <Code>useScrollStore.setState(useScrollStore.getInitialState())</Code>.
+        Unit 06 explains why, under <Code>isSynced</Code>.
+      </>
+    ),
+  },
+  {
     title: "Lenis respects reduced motion by default",
     body: (
       <>

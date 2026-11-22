@@ -21,6 +21,7 @@ const SmoothScroll = () => {
     return () => {
       detachLenis();
       unsubscribe();
+      useScrollStore.setState(useScrollStore.getInitialState());
       lenis.destroy();
     };
   }, []);

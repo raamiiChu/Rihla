@@ -26,6 +26,9 @@ const SmoothScroll = () => {
     return () => {
       cancelAnimationFrame(refId);
       unsubscribe();
+      // The store outlives this page; without a reset, the next page's first
+      // render would trust this page's progress.
+      useScrollStore.setState(useScrollStore.getInitialState());
       lenis.destroy();
       console.log("destroyed");
     };
