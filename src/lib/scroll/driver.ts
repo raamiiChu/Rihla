@@ -113,6 +113,10 @@ type ScrollToProgressOptions = Pick<
   "immediate" | "duration" | "onComplete"
 >;
 
+// Pixel snapping can land a jump just short of `flightEnd`; leaning 1 px into
+// the dwell outweighs any snapping.
+const DWELL_SIDE_BIAS_PX = 1;
+
 export const scrollToProgress = (
   progress: number,
   options?: ScrollToProgressOptions,
@@ -121,5 +125,6 @@ export const scrollToProgress = (
     return;
   }
 
-  lenis.scrollTo(progress * lenis.limit, options);
+  const target = progress > 0 ? progress * lenis.limit + DWELL_SIDE_BIAS_PX : 0;
+  lenis.scrollTo(Math.min(target, lenis.limit), options);
 };
