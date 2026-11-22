@@ -100,6 +100,26 @@ export const getStationIndex = (
 };
 
 /**
+ * The station whose dwell holds `progress`, or null mid-flight. Unlike
+ * `getStationIndex`, which switches as soon as the flight into a station
+ * begins, this only switches on arrival (`flightEnd`), so the narration shows
+ * while the shape does and never during a flight. A station with no dwell is
+ * never returned, not even at progress 1. Progress outside 0–1 is clamped.
+ */
+export const getDwellingStationIndex = (
+  progress: number,
+  ranges: readonly StationRange[],
+): number | null => {
+  const clampedProgress = MathUtils.clamp(progress, 0, 1);
+  const stationIndex = getStationIndex(clampedProgress, ranges);
+  const { flightEnd, dwellEnd } = ranges[stationIndex];
+
+  const isDwelling = clampedProgress >= flightEnd && dwellEnd > flightEnd;
+
+  return isDwelling ? stationIndex : null;
+};
+
+/**
  * Where SKIP lands: the arrival (`flightEnd`) of the first station still
  * ahead that has a dwell to show. Mid-flight, that is the station being flown
  * to; mid-dwell, the next one. A station with no dwell is passed over, since

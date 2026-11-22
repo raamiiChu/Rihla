@@ -3,6 +3,7 @@ import { STATION_WEIGHTS } from "@/data/timeline";
 import {
   buildStationRanges,
   countDestinationsBetween,
+  getDwellingStationIndex,
   getSkipDestination,
   getStationIndex,
   type StationRange,
@@ -393,6 +394,92 @@ describe("countDestinationsBetween", () => {
       expect(countDestinationsBetween(first, last, ranges)).toBe(
         ranges.length - 2,
       );
+    });
+  });
+});
+
+describe("getDwellingStationIndex", () => {
+  // THREE_STATION_RANGES: a dwells [0, 0.2), b flies [0.2, 0.3) and dwells
+  // [0.3, 0.5), c flies [0.5, 0.7) and dwells [0.7, 1].
+  describe("lookup", () => {
+    it.each([
+      { name: "the start, with no flight before it", progress: 0, expected: 0 },
+      { name: "the first dwell", progress: 0.1, expected: 0 },
+      {
+        name: "the end of a dwell, which starts the next flight",
+        progress: 0.2,
+        expected: null,
+      },
+      { name: "a flight", progress: 0.25, expected: null },
+      { name: "just before an arrival", progress: 0.3 - 1e-9, expected: null },
+      { name: "an arrival", progress: 0.3, expected: 1 },
+      { name: "a dwell", progress: 0.4, expected: 1 },
+      { name: "the last flight", progress: 0.6, expected: null },
+      { name: "the last dwell", progress: 0.85, expected: 2 },
+      { name: "the end", progress: 1, expected: 2 },
+    ])("$name ($progress) is $expected", ({ progress, expected }) => {
+      expect(getDwellingStationIndex(progress, THREE_STATION_RANGES)).toBe(
+        expected,
+      );
+    });
+  });
+
+  describe("out of range", () => {
+    it.each([
+      { progress: -0.5, expected: 0 },
+      { progress: 1.5, expected: 2 },
+    ])("clamps $progress to $expected", ({ progress, expected }) => {
+      expect(getDwellingStationIndex(progress, THREE_STATION_RANGES)).toBe(
+        expected,
+      );
+    });
+  });
+
+  describe("zero dwells", () => {
+    it("never returns a station with no dwell", () => {
+      const ranges = buildStationRanges([
+        { id: "a", flight: 0, dwell: 1 },
+        { id: "b", flight: 1, dwell: 0 },
+        { id: "c", flight: 1, dwell: 1 },
+      ]);
+      for (const progress of SWEEP) {
+        expect(getDwellingStationIndex(progress, ranges)).not.toBe(1);
+      }
+    });
+
+    it("returns null at the end when the last station has no dwell", () => {
+      const ranges = buildStationRanges([
+        { id: "a", flight: 0, dwell: 1 },
+        { id: "b", flight: 1, dwell: 0 },
+      ]);
+      expect(getDwellingStationIndex(1, ranges)).toBeNull();
+    });
+  });
+
+  describe("properties", () => {
+    it("agrees with getStationIndex whenever it is not null", () => {
+      for (const progress of SWEEP) {
+        const dwelling = getDwellingStationIndex(
+          progress,
+          THREE_STATION_RANGES,
+        );
+        if (dwelling !== null) {
+          expect(dwelling).toBe(
+            getStationIndex(progress, THREE_STATION_RANGES),
+          );
+        }
+      }
+    });
+
+    it("is null exactly during flights", () => {
+      for (const progress of SWEEP) {
+        const range =
+          THREE_STATION_RANGES[getStationIndex(progress, THREE_STATION_RANGES)];
+        const inFlight = progress < range.flightEnd;
+        expect(
+          getDwellingStationIndex(progress, THREE_STATION_RANGES) === null,
+        ).toBe(inFlight);
+      }
     });
   });
 });
