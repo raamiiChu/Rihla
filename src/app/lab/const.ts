@@ -86,7 +86,7 @@ const UNITS: Unit[] = [
     title: { "zh-TW": "依弧長重新取樣", "en-GB": "Resampling by arc length" },
     phase: 1,
     kind: "page",
-    status: "todo",
+    status: "done",
   },
   {
     id: "08",
