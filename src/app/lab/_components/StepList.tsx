@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
-import { useLabUi } from "../_i18n";
+import { getLabUi } from "../_i18n";
 
 type Step = { id: string; title: ReactNode; done: boolean };
 
 /** Ordered practice steps with their completion state. */
 const StepList = ({ items }: { items: Step[] }) => {
-  const ui = useLabUi();
+  const ui = getLabUi();
 
   return (
     <ol className="space-y-2">

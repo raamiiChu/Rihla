@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { LocaleSwitcher } from "@/components";
-import { useLabLocale, useLabUi } from "./_i18n";
+import { getLabUi, useLabLocale } from "./_i18n";
 import { PHASES, type Phase, UNITS, type Unit, type UnitStatus } from "./const";
 
 const STATUS_STYLE: Record<UnitStatus, string> = {
@@ -13,7 +13,7 @@ const UnitRow = ({ unit }: { unit: Unit }) => {
   // Script units have no demo page, but they still get a notes page.
   const isOpenable = unit.status !== "todo";
   const locale = useLabLocale();
-  const ui = useLabUi();
+  const ui = getLabUi();
 
   const content = (
     <>
@@ -59,7 +59,7 @@ const LabPage = () => {
   const phases = Object.keys(PHASES).map(Number) as Phase[];
   const doneCount = UNITS.filter((unit) => unit.status === "done").length;
   const locale = useLabLocale();
-  const ui = useLabUi();
+  const ui = getLabUi();
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">

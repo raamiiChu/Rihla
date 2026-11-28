@@ -1,11 +1,11 @@
-import { useLabUi } from "../_i18n";
+import { getLabUi } from "../_i18n";
 
 /**
  * Placeholder shown while a unit's Scene chunk is loading.
  * Pass it to `dynamic(..., { loading: SceneLoading })`.
  */
 const SceneLoading = () => {
-  const ui = useLabUi();
+  const ui = getLabUi();
 
   return (
     <div className="flex h-full items-center justify-center text-sm text-muted-foreground">

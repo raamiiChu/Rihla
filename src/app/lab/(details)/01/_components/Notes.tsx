@@ -7,12 +7,12 @@ import {
   StepList,
   VerificationList,
 } from "@/app/lab/_components";
-import { useLabUi } from "@/app/lab/_i18n";
+import { getLabUi } from "@/app/lab/_i18n";
 import { getGlyphTable, getMetricTable, useUnit01Content } from "../_content";
 
 const Notes = () => {
   const content = useUnit01Content();
-  const ui = useLabUi();
+  const ui = getLabUi();
   const { measurements } = content;
   const metricTable = getMetricTable(measurements);
   const glyphTable = getGlyphTable(measurements);

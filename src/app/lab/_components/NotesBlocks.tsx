@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { PropsWithChildren, ReactNode } from "react";
 import { LocaleSwitcher } from "@/components";
-import { useLabLocale, useLabUi } from "../_i18n";
+import { getLabUi, useLabLocale } from "../_i18n";
 import { UNITS } from "../const";
 
 type NotesHeaderProps = PropsWithChildren<{
@@ -13,7 +13,7 @@ type NotesHeaderProps = PropsWithChildren<{
 const NotesHeader = ({ unitId, children }: NotesHeaderProps) => {
   const unit = UNITS.find(({ id }) => id === unitId);
   const locale = useLabLocale();
-  const ui = useLabUi();
+  const ui = getLabUi();
 
   if (!unit) {
     throw new Error(`Unknown lab unit: ${unitId}`);
@@ -67,7 +67,7 @@ const ConceptList = ({
   items: Concept[];
   title?: string;
 }) => {
-  const ui = useLabUi();
+  const ui = getLabUi();
 
   return (
     <NotesSection title={title ?? ui.sections.concepts}>
@@ -97,7 +97,7 @@ const PITFALL_FIELDS = [
 ] as const;
 
 const PitfallList = ({ items }: { items: Pitfall[] }) => {
-  const ui = useLabUi();
+  const ui = getLabUi();
 
   return (
     <NotesSection title={ui.sections.pitfalls}>
@@ -126,7 +126,7 @@ const PitfallList = ({ items }: { items: Pitfall[] }) => {
 type Verification = { id: string; body: ReactNode };
 
 const VerificationList = ({ items }: { items: Verification[] }) => {
-  const ui = useLabUi();
+  const ui = getLabUi();
 
   return (
     <NotesSection title={ui.sections.verification}>

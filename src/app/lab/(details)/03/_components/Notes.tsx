@@ -6,13 +6,13 @@ import {
   StepList,
   VerificationList,
 } from "@/app/lab/_components";
-import { useLabUi } from "@/app/lab/_i18n";
+import { getLabUi } from "@/app/lab/_i18n";
 import { useUnit03Content } from "../_content";
 import DriverTimeline from "./DriverTimeline";
 
 const Notes = () => {
   const content = useUnit03Content();
-  const ui = useLabUi();
+  const ui = getLabUi();
   const { handoff, findings, limitations } = content;
 
   return (

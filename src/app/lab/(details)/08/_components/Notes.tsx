@@ -6,12 +6,12 @@ import {
   StepList,
   VerificationList,
 } from "@/app/lab/_components";
-import { useLabUi } from "@/app/lab/_i18n";
+import { getLabUi } from "@/app/lab/_i18n";
 import { useUnit08Content } from "../_content";
 
 const Notes = () => {
   const content = useUnit08Content();
-  const ui = useLabUi();
+  const ui = getLabUi();
 
   return (
     <>

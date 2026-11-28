@@ -7,12 +7,12 @@ import {
   StepList,
   VerificationList,
 } from "@/app/lab/_components";
-import { useLabUi } from "@/app/lab/_i18n";
+import { getLabUi } from "@/app/lab/_i18n";
 import { getReadTable, getRenderTable, useUnit02Content } from "../_content";
 
 const Notes = () => {
   const content = useUnit02Content();
-  const ui = useLabUi();
+  const ui = getLabUi();
   const readTable = getReadTable(content.readTable);
   const renderTable = getRenderTable(content.renderTable);
 

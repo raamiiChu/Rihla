@@ -101,7 +101,7 @@ const LAB_UI: Localised<LabUi> = {
 };
 
 /** Works in Server Components and Client Components alike. */
-const useLabUi = () => LAB_UI[useLabLocale()];
+const getLabUi = () => LAB_UI[useLabLocale()];
 
 export type { LabLocale, Localised };
-export { useLabLocale, useLabUi };
+export { getLabUi, useLabLocale };

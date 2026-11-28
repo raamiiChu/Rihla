@@ -7,13 +7,13 @@ import {
   StepList,
   VerificationList,
 } from "@/app/lab/_components";
-import { useLabUi } from "@/app/lab/_i18n";
+import { getLabUi } from "@/app/lab/_i18n";
 import { getQueryTable, getRangeTable, useUnit05Content } from "../_content";
 import FlowDiagram from "./FlowDiagram";
 
 const Notes = () => {
   const content = useUnit05Content();
-  const ui = useLabUi();
+  const ui = getLabUi();
   const { dataFlow, timeline, coordinates, queries } = content;
   const rangeTable = getRangeTable(timeline.columns);
   const queryTable = getQueryTable(queries);
