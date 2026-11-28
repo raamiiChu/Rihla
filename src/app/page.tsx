@@ -1,7 +1,13 @@
 import { getTranslations } from "next-intl/server";
 import { LocaleSwitcher, SmoothScroll } from "@/components";
-import { SceneLoader, StationLines, Stations } from "./_components";
+import { JumpMask, SceneLoader, StationStops } from "./_components";
 import { JumpMaskProvider } from "./_contexts/JumpMaskProvider";
+
+/**
+ * The journey's scroll length, in screen heights. A first guess, to be tuned
+ * with the timeline's weights once the scenes exist.
+ */
+const SCROLL_LENGTH_SCREENS = 30;
 
 export default async function Home() {
   const t = await getTranslations("home");
@@ -12,15 +18,14 @@ export default async function Home() {
         <LocaleSwitcher />
       </header>
 
-      <main>
+      <main style={{ height: `${SCROLL_LENGTH_SCREENS * 100}dvh` }}>
         <h1 className="sr-only">{t("title")}</h1>
 
         <JumpMaskProvider>
           <SceneLoader />
-          <StationLines />
+          <StationStops />
+          <JumpMask />
         </JumpMaskProvider>
-
-        <Stations />
       </main>
 
       <SmoothScroll />
