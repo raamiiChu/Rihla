@@ -9,7 +9,7 @@ import { useState } from "react";
 import { CANVAS_BG_COLOR } from "@/app/lab/const";
 import { ScrollDriverHandoff } from "@/components";
 import { Button } from "@/components/ui/button";
-import { DEFAULT_RAIL, RAILS, type RailName } from "../_utils/rails";
+import { DEFAULT_RAIL, RAILS, type RailName } from "../../_utils/rails";
 import ControlPoints from "./ControlPoints";
 import LutPoints from "./LutPoints";
 import RailCamera from "./RailCamera";

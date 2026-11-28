@@ -5,7 +5,7 @@ import type { RefObject } from "react";
 
 import { SceneLoading } from "@/app/lab/_components";
 
-const Scene = dynamic(() => import("./Scene"), {
+const Scene = dynamic(() => import("./Scene/Scene"), {
   ssr: false,
   loading: SceneLoading,
 });

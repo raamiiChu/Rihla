@@ -1,6 +1,6 @@
 import { extend } from "@react-three/fiber";
 import { Line } from "three";
-import { SOURCE_LINE_COLOR } from "../_data/colors";
+import { SOURCE_LINE_COLOR } from "../../_data/colors";
 
 // `<line>` is taken by SVG, so register three's Line under another name.
 // `<lineLoop>` has no clash and needs no `extend`.

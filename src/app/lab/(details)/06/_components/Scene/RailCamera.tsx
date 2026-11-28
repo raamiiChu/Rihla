@@ -6,8 +6,8 @@ import { getRailProgress } from "@/lib/camera/pacing";
 import { createCameraState, getCameraState } from "@/lib/camera/rail";
 import { useScrollStore } from "@/stores/scroll";
 
-import { LUT, STATION_RAIL_POSITIONS } from "../_utils/rail";
-import { DEMO_STATION_RANGES } from "../_utils/timeline";
+import { LUT, STATION_RAIL_POSITIONS } from "../../_utils/rail";
+import { DEMO_STATION_RANGES } from "../../_utils/timeline";
 
 const cameraState = createCameraState();
 

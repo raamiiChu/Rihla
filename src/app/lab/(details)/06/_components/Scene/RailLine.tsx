@@ -2,7 +2,7 @@ import { extend } from "@react-three/fiber";
 import { useMemo } from "react";
 import { Line } from "three";
 
-import { CURVE } from "../_utils/rail";
+import { CURVE } from "../../_utils/rail";
 
 extend({ ThreeLine: Line });
 

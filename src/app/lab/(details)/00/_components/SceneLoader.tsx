@@ -5,7 +5,7 @@ import { SceneLoading } from "@/app/lab/_components";
 
 // The import path must be a static string so the bundler can split it into
 // its own chunk, which is why each unit keeps its own SceneLoader.
-const Scene = dynamic(() => import("./Scene"), {
+const Scene = dynamic(() => import("./Scene/Scene"), {
   ssr: false,
   loading: SceneLoading,
 });

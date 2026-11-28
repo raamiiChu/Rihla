@@ -2,9 +2,9 @@ import { Html } from "@react-three/drei";
 import { Vector3 } from "three";
 import { GOLD_COLOR } from "@/app/lab/const";
 import { createCameraState, getCameraState } from "@/lib/camera/rail";
-import { HTML_Z_INDEX_RANGE } from "../_utils/html";
-import { LUT, STATION_RAIL_POSITIONS } from "../_utils/rail";
-import { DEMO_STATION_WEIGHTS } from "../_utils/timeline";
+import { HTML_Z_INDEX_RANGE } from "../../_utils/html";
+import { LUT, STATION_RAIL_POSITIONS } from "../../_utils/rail";
+import { DEMO_STATION_WEIGHTS } from "../../_utils/timeline";
 
 /** How far ahead of the resting camera each marker sits; within `far`. */
 const MARKER_DISTANCE = 10;

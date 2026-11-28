@@ -1,6 +1,6 @@
 import { useThree } from "@react-three/fiber";
 import { useEffect } from "react";
-import { SOURCE_BOUNDS } from "../_data/polyline";
+import { SOURCE_BOUNDS } from "../../_data/polyline";
 
 // Leave room around the shape, and for the buttons along the top.
 const FILL = 0.8;

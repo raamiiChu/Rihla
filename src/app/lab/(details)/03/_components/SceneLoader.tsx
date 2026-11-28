@@ -11,7 +11,7 @@ const wait = (ms: number) =>
 const Scene = dynamic(
   async () => {
     await wait(SCENE_LOAD_DELAY_MS);
-    return import("./Scene");
+    return import("./Scene/Scene");
   },
   {
     ssr: false,

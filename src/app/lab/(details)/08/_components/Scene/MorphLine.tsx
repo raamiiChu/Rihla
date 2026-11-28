@@ -8,14 +8,14 @@ import {
   type PointsMaterial,
 } from "three";
 import { align, reverse, rotateStart } from "@/lib/morph/align";
-import { CLOUD_OFFSETS } from "../_data/cloud";
+import { CLOUD_OFFSETS } from "../../_data/cloud";
 import {
   CLOUD_POINT_COLOR,
   FIRST_TIP_COLOR,
   SOURCE_LINE_COLOR,
   TIP_COLOR,
-} from "../_data/color";
-import { POINT_COUNT, SHAPES, STAR_TIP_INDICES } from "../_data/shapes";
+} from "../../_data/color";
+import { POINT_COUNT, SHAPES, STAR_TIP_INDICES } from "../../_data/shapes";
 
 /**
  * One colour per tip marker, fixed: the first tip stands out, so a twist

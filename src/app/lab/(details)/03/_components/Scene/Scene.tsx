@@ -2,7 +2,7 @@ import { addEffect, Canvas } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
 import { CANVAS_BG_COLOR } from "@/app/lab/const";
 import { Button } from "@/components/ui/button";
-import { driveWithFallback, driveWithR3f } from "../_utils/scrollDriver";
+import { driveWithFallback, driveWithR3f } from "../../_utils/scrollDriver";
 import ProgressBox from "./ProgressBox";
 
 const connectR3f = (canvas: HTMLCanvasElement) => {
