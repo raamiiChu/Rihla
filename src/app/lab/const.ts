@@ -96,7 +96,7 @@ const UNITS: Unit[] = [
     },
     phase: 1,
     kind: "page",
-    status: "todo",
+    status: "done",
   },
   {
     id: "09",
