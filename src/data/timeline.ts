@@ -11,14 +11,14 @@ import {
  * dwells run longer, since they carry the prologue and the closing summary.
  */
 export const STATION_WEIGHTS = [
-  { id: "tangier", flight: 0, dwell: 10 },
-  { id: "mecca", flight: 5, dwell: 5 },
-  { id: "samarkand", flight: 5, dwell: 5 },
-  { id: "delhi", flight: 5, dwell: 5 },
-  { id: "maldives", flight: 5, dwell: 5 },
-  { id: "quanzhou", flight: 5, dwell: 5 },
-  { id: "timbuktu", flight: 5, dwell: 5 },
-  { id: "fez", flight: 5, dwell: 10 },
+  { id: "tangier", flight: 0, dwell: 15 },
+  { id: "mecca", flight: 10, dwell: 25 },
+  { id: "samarkand", flight: 10, dwell: 25 },
+  { id: "delhi", flight: 10, dwell: 25 },
+  { id: "maldives", flight: 10, dwell: 25 },
+  { id: "quanzhou", flight: 10, dwell: 25 },
+  { id: "timbuktu", flight: 10, dwell: 25 },
+  { id: "fez", flight: 10, dwell: 15 },
 ] as const satisfies readonly StationWeights[];
 
 export const STATION_RANGES = buildStationRanges(STATION_WEIGHTS);
