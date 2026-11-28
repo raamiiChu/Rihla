@@ -7,6 +7,7 @@
     "title": "伊本‧巴圖塔的旅程",
     "intro": "伊本‧巴圖塔口述的遊記名為<i>Rihla</i>。",
     "scrollHint": "向下捲動",
+    "loading": "載入中…",
     "stops": {
       "tangier": {
         "name": "丹吉爾",

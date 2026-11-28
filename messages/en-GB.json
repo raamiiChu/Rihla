@@ -7,6 +7,7 @@
     "title": "Rihla",
     "intro": "Ibn Battuta's travelogue is called <i>Rihla</i>.",
     "scrollHint": "Scroll to begin",
+    "loading": "Loading…",
     "stops": {
       "tangier": {
         "name": "Tangier",
